@@ -1,27 +1,74 @@
 <template>
   <v-app id="ecommerce">
-
-    <v-toolbar
+    <v-navigation-drawer
+      persistent
+      clipped
+      v-model="drawer"
+      enable-resize-watcher
+      fixed
       app
-      dense
     >
-      <v-menu offset-y attach="#menu">
-        <v-toolbar-side-icon slot="activator"></v-toolbar-side-icon>
-
-        <v-list>
+      <v-list>
+        <v-list-group
+          v-for="category in categories"
+          :key="category.id"
+          :prepend-icon="category.iconName"
+        >
+          <v-list-tile slot="activator">
+            <v-list-tile-title>{{category.name}}</v-list-tile-title>
+          </v-list-tile>
           <v-list-tile
-            v-for="(item, index) in items"
-            :key="index"
+            v-for="subcategory in category.subCategories"
+            :key="subcategory.id"
             @click=""
           >
-            <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            <v-list-tile-title v-text="subcategory.name"></v-list-tile-title>
+            <v-list-tile-action>
+              <v-icon v-text="subcategory.id"></v-icon>
+            </v-list-tile-action>
           </v-list-tile>
-        </v-list>
-      </v-menu>
+        </v-list-group>
+      </v-list>
+    </v-navigation-drawer>
+    <v-toolbar
+      app
+      clipped-left
+    >
+      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-toolbar-title v-text="title"></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-text-field
+        class="mx-3"
+        flat
+        label="Search"
+        append-icon="search"
+        solo-inverted
+        clear-icon="mdi-close-circle"
+        clearable
+        :append-icon-cb="searchItem"
+      ></v-text-field>
+      <v-badge overlap>
+        <span slot="badge">0</span>
+        <v-icon large>
+          mdi-cart
+        </v-icon>
+      </v-badge>
     </v-toolbar>
-    <div id="menu"></div>
     <v-content>
+      <v-snackbar
+        v-model="snackbar"
+        timeout="5000"
+        right
+      >
+        Sorry, Search is not implemented
+        <v-btn
+          color="primary"
+          flat
+          @click="snackbar = false"
+        >
+          Close
+        </v-btn>
+      </v-snackbar>
       <router-view/>
     </v-content>
     <v-footer fixed app>
@@ -31,16 +78,31 @@
 </template>
 
 <script>
-export default {
-  data () {
-    return {
-      items: [{
-        icon: 'bubble_chart',
-        title: 'Inspire'
-      }],
-      title: 'Ecommerce App'
+  import {mapState} from 'vuex'
+  // import api from './api/api'
+  export default {
+    name: 'App',
+    data () {
+      return {
+        title: 'Ecommerce App',
+        drawer: true,
+        snackbar: false
+      }
+    },
+    mounted () {
+      this.$store.dispatch('categories/getAllCategories')
+    }, /*
+    mounted () {
+      api().get('category').then(response => {this.items = response.data})
+    },
+    */
+    computed: mapState({
+      categories: state => state.categories.all
+    }),
+    methods: {
+      searchItem () {
+        this.snackbar = true
+      }
     }
-  },
-  name: 'App'
-}
+  }
 </script>
