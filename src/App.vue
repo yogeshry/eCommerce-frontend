@@ -51,11 +51,11 @@
       <v-spacer></v-spacer>
       <v-badge overlap>
         <span slot="badge">0</span>
-        <v-icon large>
+        <v-icon large :to="Cart">
           mdi-cart
         </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
-      <span><router-link :to="{name: 'Login'}">Login </router-link>Or Signup</span>
+      <span><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
