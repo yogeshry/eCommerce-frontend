@@ -18,7 +18,7 @@
             </div>
             <div>
               <input class="item-quantity" type="number" min=0 v-model="items[0].order_quantity" >
-              <span class="item-price">{{items[0].cost}}</span>
+              <span class="item-price">Rs.{{items[0].cost}}</span>
             </div>
           </li>
         </ul>
@@ -33,7 +33,7 @@
             </div>
             <div>
               <input class="item-quantity" type="number" min=0 v-model="items[1].order_quantity" >
-              <span class="item-price">{{items[1].cost}}</span>
+              <span class="item-price">Rs.{{items[1].cost}}</span>
             </div>
           </li>
         </ul>
