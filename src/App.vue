@@ -21,6 +21,7 @@
             v-for="subcategory in category.subCategories"
             :key="subcategory.id"
             @click=""
+            ripple
           >
             <v-list-tile-title v-text="subcategory.name"></v-list-tile-title>
             <v-list-tile-action>
@@ -35,7 +36,7 @@
       clipped-left
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-toolbar-title v-text="title"></v-toolbar-title>
+      <router-link :to="{name:'Home'}"><v-toolbar-title v-text="title"></v-toolbar-title></router-link>
       <v-spacer></v-spacer>
       <v-text-field
         class="mx-3"
@@ -47,12 +48,15 @@
         clearable
         :append-icon-cb="searchItem"
       ></v-text-field>
+      <v-spacer></v-spacer>
       <v-badge overlap>
         <span slot="badge">0</span>
         <v-icon large>
           mdi-cart
         </v-icon>
-      </v-badge>
+      </v-badge>&nbsp; &nbsp; &nbsp;
+      <span><router-link :to="{name: 'Login'}">Login </router-link>Or Signup</span>
+      <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
       <v-snackbar
@@ -72,13 +76,13 @@
       <router-view/>
     </v-content>
     <v-footer fixed app>
-      <span>&copy; 2017</span>
+      <span>&copy; 2018</span>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import { mapState } from 'vuex'
   // import api from './api/api'
   export default {
     name: 'App',
@@ -106,3 +110,10 @@
     }
   }
 </script>
+
+<style scoped>
+  a:link, a:visited, a:hover, a:active {
+    text-decoration: none;
+    color: inherit;
+  }
+</style>
