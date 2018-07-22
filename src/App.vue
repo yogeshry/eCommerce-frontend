@@ -36,7 +36,9 @@
       clipped-left
     >
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <router-link :to="{name:'Home'}"><v-toolbar-title v-text="title"></v-toolbar-title></router-link>
+      <router-link :to="{name:'Home'}">
+        <v-toolbar-title v-text="title"></v-toolbar-title>
+      </router-link>
       <v-spacer></v-spacer>
       <v-text-field
         class="mx-3"
@@ -51,9 +53,9 @@
       <v-spacer></v-spacer>
       <v-badge overlap>
         <span slot="badge">0</span>
-        <v-icon large :to="Cart">
-          mdi-cart
-        </v-icon>
+          <v-icon large @click="goToCart">
+            mdi-cart
+          </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
       <span><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
       <v-spacer></v-spacer>
@@ -64,7 +66,7 @@
         timeout="5000"
         right
       >
-        Sorry, Search is not implemented
+        Sorry, Search is not implemented.
         <v-btn
           color="primary"
           flat
@@ -82,18 +84,18 @@
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import {mapState} from 'vuex'
   // import api from './api/api'
   export default {
     name: 'App',
-    data () {
+    data() {
       return {
         title: 'Ecommerce App',
         drawer: true,
         snackbar: false
       }
     },
-    mounted () {
+    mounted() {
       this.$store.dispatch('categories/getAllCategories')
     }, /*
     mounted () {
@@ -104,8 +106,11 @@
       categories: state => state.categories.all
     }),
     methods: {
-      searchItem () {
+      searchItem() {
         this.snackbar = true
+      },
+      goToCart () {
+        this.$router.push({name: 'Cart'})
       }
     }
   }

@@ -80,7 +80,7 @@
   export default {
     name: 'signup',
     data: () => ({
-      login: true,
+      signup: true,
       firstName: '',
       middleName: '',
       lastName: '',
