@@ -28,7 +28,7 @@
 
 <script>
     export default {
-      name: 'Detail',
+      name: 'ProductDetail',
       data () {
         return {
           items: [

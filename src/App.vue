@@ -20,7 +20,7 @@
           <v-list-tile
             v-for="subcategory in category.subCategories"
             :key="subcategory.id"
-            @click=""
+            :to="{name: 'SubCategory', params: {id: subcategory.id}}"
             ripple
           >
             <v-list-tile-title v-text="subcategory.name"></v-list-tile-title>
@@ -53,9 +53,9 @@
       <v-spacer></v-spacer>
       <v-badge overlap>
         <span slot="badge">0</span>
-          <v-icon large @click="goToCart">
-            mdi-cart
-          </v-icon>
+        <v-icon large @click="goToCart">
+          mdi-cart
+        </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
       <span><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
       <v-spacer></v-spacer>
@@ -88,14 +88,14 @@
   // import api from './api/api'
   export default {
     name: 'App',
-    data() {
+    data () {
       return {
         title: 'Ecommerce App',
         drawer: true,
         snackbar: false
       }
     },
-    mounted() {
+    mounted () {
       this.$store.dispatch('categories/getAllCategories')
     }, /*
     mounted () {
@@ -106,7 +106,7 @@
       categories: state => state.categories.all
     }),
     methods: {
-      searchItem() {
+      searchItem () {
         this.snackbar = true
       },
       goToCart () {
