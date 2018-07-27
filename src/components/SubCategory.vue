@@ -2,7 +2,8 @@
   <v-container fluid>
     <v-layout row wrap>
       <v-flex d-flex>
-        Row 1
+        {{subCategory.name}} <br/>
+        {{productsBySubCategory.length}} {{itemAlias}}
       </v-flex>
     </v-layout>
     <v-layout row wrap>
@@ -19,7 +20,7 @@
       <v-flex d-flex>
         <v-card>
           <v-toolbar flat>
-            <v-toolbar-title>{{productsBySubCategory}}</v-toolbar-title>
+            <v-toolbar-title></v-toolbar-title>
             <v-spacer></v-spacer>
           </v-toolbar>
           <v-container fluid grid-list-md>
@@ -40,13 +41,21 @@
 
 <script>
   import {mapState} from 'vuex'
+
   export default {
     name: 'SubCategory',
-    computed: mapState({
-      productsBySubCategory: state => state.products.allBySubCategory
-    }),
+    computed: {
+      itemAlias: function () {
+        return this.productsBySubCategory.length > 1 ? 'items' : 'item'
+      },
+      ...mapState({
+        productsBySubCategory: state => state.products.allBySubCategory,
+        subCategory: state => state.categories.subCategory
+      })
+    },
     mounted () {
       this.$store.dispatch('products/getAllProductsBySubCategory', {id: this.$route.params.id})
+      this.$store.dispatch('categories/getSubCategory', {id: this.$route.params.id})
     }
   }
 </script>

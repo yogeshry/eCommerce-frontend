@@ -1,7 +1,8 @@
 import api from '../../api/api'
 
 const state = {
-  all: []
+  all: [],
+  subCategory: null
 }
 
 const getters = {}
@@ -14,12 +15,23 @@ const actions = {
       .then(categories => {
         commit('setCategories', categories)
       })
+  },
+  getSubCategory ({commit}, subCategory) {
+    api()
+      .get(`subCategories/${subCategory.id}`)
+      .then(r => r.data)
+      .then(subCategory => {
+        commit('setSubCategory', subCategory)
+      })
   }
 }
 
 const mutations = {
   setCategories (state, categories) {
     state.all = categories
+  },
+  setSubCategory (state, subCategory) {
+    state.subCategory = subCategory
   }
 }
 
