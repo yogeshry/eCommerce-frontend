@@ -10,16 +10,16 @@
     >
       <v-list>
         <v-list-group
-          v-for="category in categories"
-          :key="category.id"
+          v-for="(category, i) in categories"
+          :key="i"
           :prepend-icon="category.iconName"
         >
           <v-list-tile slot="activator">
             <v-list-tile-title>{{category.name}}</v-list-tile-title>
           </v-list-tile>
           <v-list-tile
-            v-for="subcategory in category.subCategories"
-            :key="subcategory.id"
+            v-for="(subcategory,i) in category.subCategories"
+            :key="i"
             :to="{name: 'SubCategory', params: {id: subcategory.id}}"
             ripple
           >
@@ -63,7 +63,7 @@
     <v-content>
       <v-snackbar
         v-model="snackbar"
-        timeout="5000"
+        :timeout="5000"
         right
       >
         Sorry, Search is not implemented.

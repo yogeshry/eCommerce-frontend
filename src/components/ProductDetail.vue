@@ -2,23 +2,23 @@
 <v-container>
   <v-layout row wrap>
     <v-flex>
-      <img src="iepimage"/>
+      <img src="/static/iphone8.png"/>
     </v-flex>
     <v-flex>
       <v-layout>
         <v-flex fill-height><h1>
-          {{items[0].name}}{{items[0].model}}
+          {{product.name}} {{product.model}}
         </h1>
         </v-flex>
       </v-layout>
       <v-layout>
         <v-flex fill-height>
-          {{items[0].description}}
+          {{product.description}}
         </v-flex>
       </v-layout>
       <v-layout>
         <v-flex>
-          {{items[0].cost}}
+          {{product.cost}}
         </v-flex>
       </v-layout>
     </v-flex>
@@ -27,16 +27,23 @@
 </template>
 
 <script>
-    export default {
-      name: 'ProductDetail',
-      data () {
-        return {
-          items: [
+  import {mapState} from 'vuex'
+  export default {
+    name: 'ProductDetail',
+    data () {
+      return {
+        items: [
             {id: 1, name: 'Iphone', model: '8 Plus', cost: 99000, description: 'This is Iphone 8 Plus', specifications: 'specs'}
-          ]
-        }
+        ]
       }
-    }
+    },
+    mounted () {
+      this.$store.dispatch('products/getProductById', {id: this.$route.params.id})
+    },
+    computed: mapState({
+      product: state => state.products.product
+    })
+  }
 </script>
 
 <style scoped>

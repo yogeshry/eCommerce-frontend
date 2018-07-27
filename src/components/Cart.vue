@@ -68,7 +68,7 @@
       return {
         items: [
           {id: 1, name: 'Iphone', model: '8 Plus', cost: 99000, description: 'This is Iphone 8 Plus', specifications: 'specs', order_quantity: 5, vat: 13, shipping: 50},
-          {id: 2, name: 'Iphone', model: '10 Plus', cost: 10000, description: 'This is Iphone 10 Plus', specifications: 'specs', order_quantity: 1, vat: 13, shipping: 90},
+          {id: 2, name: 'Iphone', model: '10 Plus', cost: 10000, description: 'This is Iphone 10 Plus', specifications: 'specs', order_quantity: 1, vat: 13, shipping: 90}
         ]
       }
     },
