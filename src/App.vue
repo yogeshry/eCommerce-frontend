@@ -97,7 +97,9 @@
     },
     mounted () {
       this.$store.dispatch('categories/getAllCategories')
-    }, /*
+    },
+
+    /*
     mounted () {
       api().get('category').then(response => {this.items = response.data})
     },

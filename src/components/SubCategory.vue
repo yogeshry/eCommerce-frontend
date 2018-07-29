@@ -56,6 +56,11 @@
     mounted () {
       this.$store.dispatch('products/getAllProductsBySubCategory', {id: this.$route.params.id})
       this.$store.dispatch('categories/getSubCategory', {id: this.$route.params.id})
+    },
+    beforeRouteUpdate (to, from, next) {
+      this.$store.dispatch('products/getAllProductsBySubCategory', {id: to.params.id})
+      this.$store.dispatch('categories/getSubCategory', {id: to.params.id})
+      next()
     }
   }
 </script>
