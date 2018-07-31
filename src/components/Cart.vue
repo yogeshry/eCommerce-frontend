@@ -86,7 +86,9 @@
       shipping () {
         let shipPrice = 0
         for (let itm in this.items) {
-          shipPrice = shipPrice + this.items[itm].shipping
+          if (this.items[itm].order_quantity === 0) {
+            shipPrice = 0
+          } else shipPrice = shipPrice + this.items[itm].shipping
         }
         return shipPrice
       },
@@ -98,11 +100,6 @@
 </script>
 
 <style>
-  body {
-    margin: 0;
-    background: #fdca40;
-    padding: 30px;
-  }
 
   .title {
     display: flex;
