@@ -36,8 +36,34 @@
             v-model="email"
             :rules="emailRules"
             :counter="255"
-            label="Email"
+            label="Email Address"
             required
+          ></v-text-field>
+          <v-text-field
+            v-model="phone1"
+            :rules="phone1Rules"
+            :counter="10"
+            label="Phone Number 1"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="phone2"
+            :rules="phone2Rules"
+            :counter="10"
+            label="Phone Number 2(Optional)"
+          ></v-text-field>
+          <v-text-field
+            v-model="address1"
+            :rules="address1Rules"
+            :counter="255"
+            label="Address 1"
+            required
+          ></v-text-field>
+          <v-text-field
+            v-model="address2"
+            :rules="address2Rules"
+            :counter="255"
+            label="Address 2(Optional)"
           ></v-text-field>
           <v-text-field
             v-model="username"
@@ -49,7 +75,10 @@
           <v-text-field
             v-model="password"
             :rules="passwordRules"
-            :type="'password'"
+            :type="showPassword ? 'text' : 'password'"
+            :append-icon="showPassword ? 'visibility_off' : 'visibility'"
+            @click:append="showPassword = !showPassword"
+            hint="At Least 8 Characters"
             label="Password"
             required
           >
@@ -81,6 +110,7 @@
     name: 'signup',
     data: () => ({
       signup: true,
+      showPassword: false,
       firstName: '',
       middleName: '',
       lastName: '',
@@ -97,6 +127,21 @@
         v => /.+@.+/.test(v) || 'E-mail must be valid',
         v => /^\S*$/.test(v) || 'Email cannot contain spaces'
       ],
+      phone1: '',
+      phone1Rules: [
+        v => !!v || 'Phone Number 1 is required',
+        v => (v && v.length === 10) || 'Must be of 10 digits',
+        v => /^[0-9]*$/.test(v) || 'Only Numbers'
+      ],
+      phone2: '',
+      phone2Rules: [
+        v => (v.length = 10) || 'Must be of 10 digits',
+        v => /^[0-9]*$/.test(v) || 'Only Numbers'
+      ],
+      address1: '',
+      address1Rules:[
+        v => !!v || 'Address 1 is required'
+      ],
       username: '',
       usernameRules: [
         v => !!v || 'Username is required',
@@ -105,7 +150,8 @@
       ],
       password: '',
       passwordRules: [
-        v => !!v || 'Password is required'
+        v => !!v || 'Password is required',
+        v => v.length >= 8 || 'Minimum 8 Characters'
       ],
       checkbox: false
     }),
