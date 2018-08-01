@@ -39,6 +39,8 @@
       <router-link :to="{name:'Home'}">
         <v-toolbar-title v-text="title"></v-toolbar-title>
       </router-link>
+
+
       <v-spacer></v-spacer>
       <v-text-field
         class="mx-3"
@@ -60,6 +62,9 @@
       <span v-if="authenticated !== 'true' "><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
       <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logout">Logout</v-btn></span>
       <v-spacer></v-spacer>
+
+      <router-link :to="{name:'chat'}"><h1>shop with bot</h1></router-link>
+
     </v-toolbar>
     <v-content>
       <v-snackbar
