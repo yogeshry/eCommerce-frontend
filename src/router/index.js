@@ -6,7 +6,7 @@ import Signup from '@/components/Signup'
 import ProductDetail from '@/components/ProductDetail'
 import Cart from '@/components/Cart'
 import SubCategory from '@/components/SubCategory'
-import chat from '@/components/chat'
+import Chat from '@/components/Chat'
 
 Vue.use(Router)
 
@@ -42,8 +42,8 @@ export default new Router({
     },
     {
       path: '/chat',
-      name: 'chat',
-      component: chat
+      name: 'Chat',
+      component: Chat
     }
   ],
   mode: 'history'

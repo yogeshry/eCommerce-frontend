@@ -63,7 +63,7 @@
       <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logout">Logout</v-btn></span>
       <v-spacer></v-spacer>
 
-      <router-link :to="{name:'chat'}"><h1>shop with bot</h1></router-link>
+      <router-link :to="{name:'Chat'}"><h1>shop with bot</h1></router-link>
 
     </v-toolbar>
     <v-content>

@@ -8,7 +8,7 @@
           <div class="main-nav"><div class="options"></div></div>
         </div>
       </div>
-      <Message v-for='message in messages' :message='message'/>
+      <Message v-for='(message,i) in messages' :key=i :message='message'/>
       <MessageForm @messageSent='onMessageSent'/>
     </div>
   </v-container>
