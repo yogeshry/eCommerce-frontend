@@ -2,6 +2,7 @@
   <v-container fluid>
     <v-layout row wrap>
       <v-flex d-flex>
+        {{testresponse}}
         {{subCategory.name}} <br/>
         {{productsBySubCategory.length}} {{itemAlias}}
       </v-flex>
@@ -44,6 +45,11 @@
 
   export default {
     name: 'SubCategory',
+    data () {
+      return {
+        testresponse: ''
+      }
+    },
     computed: {
       itemAlias: function () {
         return this.productsBySubCategory.length > 1 ? 'items' : 'item'

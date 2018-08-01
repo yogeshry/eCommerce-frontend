@@ -57,7 +57,8 @@
           mdi-cart
         </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
-      <span><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
+      <span v-if="authenticated !== 'true' "><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
+      <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logout">Logout</v-btn></span>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
@@ -75,6 +76,7 @@
           Close
         </v-btn>
       </v-snackbar>
+      {{username}} {{authenticated}} {{jwt}}
       <router-view/>
     </v-content>
     <v-footer fixed app>
@@ -96,6 +98,7 @@
       }
     },
     mounted () {
+      this.$store.dispatch('auth/getAuthenticationState')
       this.$store.dispatch('categories/getAllCategories')
     },
 
@@ -105,7 +108,10 @@
     },
     */
     computed: mapState({
-      categories: state => state.categories.all
+      categories: state => state.categories.all,
+      username: state => state.auth.username,
+      jwt: state => state.auth.token,
+      authenticated: state => state.auth.authenticated
     }),
     methods: {
       searchItem () {
@@ -113,6 +119,10 @@
       },
       goToCart () {
         this.$router.push({name: 'Cart'})
+      },
+      logout () {
+        this.$store.dispatch('auth/logout')
+        this.$router.push({name: 'Home'})
       }
     }
   }
