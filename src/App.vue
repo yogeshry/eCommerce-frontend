@@ -1,136 +1,19 @@
 <template>
-  <v-app id="ecommerce">
-    <v-navigation-drawer
-      persistent
-      clipped
-      v-model="drawer"
-      enable-resize-watcher
-      fixed
-      app
-    >
-      <v-list>
-        <v-list-group
-          v-for="(category, i) in categories"
-          :key="i"
-          :prepend-icon="category.iconName"
-        >
-          <v-list-tile slot="activator">
-            <v-list-tile-title>{{category.name}}</v-list-tile-title>
-          </v-list-tile>
-          <v-list-tile
-            v-for="(subcategory,i) in category.subCategories"
-            :key="i"
-            :to="{name: 'SubCategory', params: {id: subcategory.id}}"
-            ripple
-          >
-            <v-list-tile-title v-text="subcategory.name"></v-list-tile-title>
-            <v-list-tile-action>
-              <v-icon v-text="subcategory.id"></v-icon>
-            </v-list-tile-action>
-          </v-list-tile>
-        </v-list-group>
-      </v-list>
-    </v-navigation-drawer>
-    <v-toolbar
-      app
-      clipped-left
-    >
-      <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <router-link :to="{name:'Home'}">
-        <v-toolbar-title v-text="title"></v-toolbar-title>
-      </router-link>
-
-
-      <v-spacer></v-spacer>
-      <v-text-field
-        class="mx-3"
-        flat
-        label="Search"
-        append-icon="search"
-        solo-inverted
-        clear-icon="mdi-close-circle"
-        clearable
-        :append-icon-cb="searchItem"
-      ></v-text-field>
-      <v-spacer></v-spacer>
-      <v-badge overlap>
-        <span slot="badge">0</span>
-        <v-icon large @click="goToCart">
-          mdi-cart
-        </v-icon>
-      </v-badge>&nbsp; &nbsp; &nbsp;
-      <span v-if="authenticated !== 'true' "><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
-      <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logout">Logout</v-btn></span>
-      <v-spacer></v-spacer>
-
-      <router-link :to="{name:'Chat'}"><h1>shop with bot</h1></router-link>
-
-    </v-toolbar>
-    <v-content>
-      <v-snackbar
-        v-model="snackbar"
-        :timeout="5000"
-        right
-      >
-        Sorry, Search is not implemented.
-        <v-btn
-          color="primary"
-          flat
-          @click="snackbar = false"
-        >
-          Close
-        </v-btn>
-      </v-snackbar>
-      {{username}} {{authenticated}} {{jwt}}
+    <component :is="layout">
       <router-view/>
-    </v-content>
-    <v-footer fixed app>
-      <span>&copy; 2018</span>
-    </v-footer>
-  </v-app>
+    </component>
 </template>
 
 <script>
-  import {mapState} from 'vuex'
-  // import api from './api/api'
-  export default {
-    name: 'App',
-    data () {
-      return {
-        title: 'Ecommerce App',
-        drawer: true,
-        snackbar: false
-      }
-    },
-    mounted () {
-      this.$store.dispatch('auth/getAuthenticationState')
-      this.$store.dispatch('categories/getAllCategories')
-    },
-
-    /*
-    mounted () {
-      api().get('category').then(response => {this.items = response.data})
-    },
-    */
-    computed: mapState({
-      categories: state => state.categories.all,
-      username: state => state.auth.username,
-      jwt: state => state.auth.token,
-      authenticated: state => state.auth.authenticated
-    }),
-    methods: {
-      searchItem () {
-        this.snackbar = true
-      },
-      goToCart () {
-        this.$router.push({name: 'Cart'})
-      },
-      logout () {
-        this.$store.dispatch('auth/logout')
-        this.$router.push({name: 'Home'})
-      }
-    }
-  }
+ const defaultLayout = 'default'
+ export default {
+   name: 'App',
+   computed: {
+     layout () {
+       return (this.$route.meta.layout || defaultLayout) + '-layout'
+     }
+   }
+ }
 </script>
 
 <style scoped>

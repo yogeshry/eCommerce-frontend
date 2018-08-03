@@ -6,7 +6,8 @@ import Signup from '@/components/Signup'
 import ProductDetail from '@/components/ProductDetail'
 import Cart from '@/components/Cart'
 import SubCategory from '@/components/SubCategory'
-import Chat from '@/components/Chat'
+import AdminIndex from '@/components/AdminComponents/Index'
+import AdminLogin from '@/components/AdminComponents/Login'
 
 Vue.use(Router)
 
@@ -41,9 +42,16 @@ export default new Router({
       component: Cart
     },
     {
-      path: '/chat',
-      name: 'Chat',
-      component: Chat
+      path: '/admin',
+      name: 'AdminIndex',
+      component: AdminIndex,
+      meta: {layout: 'admin'}
+    },
+    {
+      path: '/admin/login',
+      name: 'AdminLogin',
+      component: AdminLogin,
+      meta: {layout: 'admin'}
     }
   ],
   mode: 'history'
