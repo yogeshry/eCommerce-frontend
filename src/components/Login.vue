@@ -42,7 +42,6 @@
           </v-card-text>
         </v-card>
         {{loginStatus}}
-        {{isAuthenticated}}
       </v-flex>
     </v-layout>
   </v-container>
@@ -77,8 +76,8 @@
       }
     },
     watch: {
-      isAuthenticated: function (newVal, oldVal) {
-        if (newVal) this.$router.push({name: 'Home'})
+      isAuthenticated: function (val) {
+        if (val) this.$router.push({name: 'Home'})
       }
     },
     computed: {

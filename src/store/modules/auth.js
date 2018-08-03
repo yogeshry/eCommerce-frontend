@@ -4,11 +4,13 @@ import base from '../../api/base'
 const state = {
   username: localStorage.getItem('username'),
   token: localStorage.getItem('jwtEcommerceToken'),
-  authenticated: localStorage.getItem('isAuthenticated')
+  authenticated: localStorage.getItem('isAuthenticated'),
+  message: null
 }
 
 const getters = {
-  isAuthenticated: state => Boolean(state.authenticated)
+  isAuthenticated: state => Boolean(state.authenticated),
+  isRegistered: state => state.message === 200
 }
 
 const actions = {
@@ -18,10 +20,23 @@ const actions = {
     }
   },
   getJwtToken ({commit}, user) {
-    base().post('/login', user)
+    base().post('login', user)
       .then(r => r.headers.authorization)
       .then(token => {
         commit('setJwtToken', {user, token})
+      })
+  },
+  signUp ({commit}, user) {
+    if (!localStorage.getItem('isAuthenticated')) {
+      commit('removeJwtToken')
+    }
+    base().post('users/sign-up', user)
+      .then(r => r.status)
+      .then(status => {
+        commit('setMessage', status)
+      })
+      .catch(err => {
+        commit('setMessage', err.status)
       })
   },
   logout ({commit}) {
@@ -45,6 +60,9 @@ const mutations = {
     state.username = null
     state.token = null
     state.authenticated = ''
+  },
+  setMessage (state, message) {
+    state.message = message
   }
 }
 
