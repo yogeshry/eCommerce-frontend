@@ -6,7 +6,6 @@
     </h1>
     <v-layout>
       <v-flex fill-height>
-
         <ul class="items">
           <li  class="item">
             <div class="item-preview">
@@ -16,6 +15,17 @@
                 <p class="item-description">{{items[1].description}}<br>shipping price ({{ items[0].shipping == 0 ? 'Free' : 'Rs.' + items[0].shipping }})</p>
               </div>
             </div>
+            <v-layout>
+              <v-flex xs1>
+              </v-flex>
+              <v-flex>
+                <v-btn fab small depressed>
+                  <v-icon>
+                    mdi-delete
+                  </v-icon>
+                </v-btn>
+              </v-flex>
+            </v-layout>
             <div>
               <input class="item-quantity" type="number" min=0 v-model="items[0].order_quantity" >
               <span class="item-price">Rs.{{items[0].cost}}</span>

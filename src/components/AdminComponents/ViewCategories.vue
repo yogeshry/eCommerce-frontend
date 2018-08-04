@@ -12,13 +12,26 @@
         >
           <v-card>
             <v-card-title>
-              <v-spacer></v-spacer>
-              <div>
-                <h2>
+              <v-menu offset-y>
+                <v-btn
+                  slot="activator"
+                >
                   {{card.title}}
-                </h2>
-              </div>
-              <v-spacer></v-spacer>
+                </v-btn>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, index) in items"
+                    :key="index"
+                    @click=""
+                  >
+                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    <v-btn small fab depressed
+                    :to="{name:'AdminIndex'}">
+                      <v-icon>mdi-pencil</v-icon>
+                    </v-btn>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
               <v-btn small fab depressed>
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
@@ -36,10 +49,16 @@
     data () {
       return {
         cards: [
-          {title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home'},
-          {title: 'Total Products', src: '/static/box-icon1.png', flex: 3, text: 'd', routeto: 'Login'},
-          {title: 'Total Categories', src: '/static/images2.png', flex: 3, text: 'd', routeto: 'ProductDetail'},
-          {title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home'},
+          {title: 'Total Users'},
+          {title: 'Total Products'},
+          {title: 'Total Categories'},
+          {title: 'Total Users'}
+        ],
+        items: [
+          { title: 'Click Me' },
+          { title: 'Click Me' },
+          { title: 'Click Me' },
+          { title: 'Click Me 2' }
         ]
       }
     }
