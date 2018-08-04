@@ -14,14 +14,27 @@
             <v-layout>
               <v-flex>
                 <v-form ref="form" v-model="addProducts">
+                  <v-layout>
+                    <v-flex><br>
+                      SubCategory
+                      <br><br><br><br>
+                      <v-layout>
+                        <v-flex xs6></v-flex>
+                        <v-flex>
+                      Brand
+                        </v-flex>
+                      </v-layout>
+                    </v-flex>
+                    <v-flex>
                   <v-select
-                    v-model="subCategory"
                     :items="items"
+                    v-model="subCategory"
                     :rules="Rules"
+                    editable
                     label="SubCategory"
                     required
                   ></v-select>
-                  <v-overflow-btn
+                  <v-select
                     v-model="brand"
                     :items="dropdown_edit"
                     :rules="Rules"
@@ -29,7 +42,9 @@
                     label="Brand"
                     overflow
                     required
-                  ></v-overflow-btn>
+                  ></v-select>
+                    </v-flex>
+                  </v-layout>
                   <v-text-field
                     v-model="productName"
                     :rules="Rules"
@@ -158,14 +173,15 @@
           {text: 'Huawei'},
           {text: 'Xiaomi'}
         ],
-        items: [
-          {text: 'Apple'},
-          {text: 'Samsung'},
-          {text: 'LG'},
-          {text: 'Huawei'},
-          {text: 'Xiaomi'}
-        ],
+        items: ['Apple', 'Samsung'],
+        //   {text: 'Apple'},
+        //   {text: 'Samsung'},
+        //   {text: 'LG'},
+        //   {text: 'Huawei'},
+        //   {text: 'Xiaomi'}
+        // ],
         subCategory: '',
+        brand: '',
         productName: '',
         productModel: '',
         Rules: [

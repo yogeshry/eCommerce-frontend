@@ -35,13 +35,14 @@
                   <v-list>
                     <v-list-tile
                       v-for="(input, index) in inputs"
-                      :key="subcategory">
-                        <v-text-field
-                          append-outer-icon="mdi-minus"
-                          @click:append-outer="deleteRow(index)"
-                          v-model="input.one" label="SubCategory"
-                        > - {{ input.one }}
-                        </v-text-field>
+                      :key="index">
+                      <v-text-field
+                        append-outer-icon="mdi-minus"
+                        @click:append-outer="deleteRow(index)"
+                        v-model="input.one"
+                        label="SubCategory"
+                      >{{ input.one }}
+                      </v-text-field>
                     </v-list-tile>
                   </v-list>
                   <v-btn
