@@ -2,7 +2,6 @@
   <v-container fluid>
     <v-layout row wrap>
       <v-flex>
-        {{testresponse}}
         <h2>
           {{subCategory.name}}
         </h2>(
@@ -32,15 +31,15 @@
       >
         <v-layout row wrap>
           <v-flex
-            v-for="card in cards"
-            v-bind="{ [`xs${card.flex}`]: true }"
-            :key="card.title"
+            v-for="product in productsBySubCategory"
+            v-bind="{ [`xs3`]: true }"
+            :key="product.id"
           >
             <v-card
             hover
-            :to="{name:card.routeto}">
+            :to="{name: 'ProductDetail', params: {id: product.id}}">
               <v-card-media
-                :src="card.src"
+                :src="src"
                 height="150px"
               >
                 <v-container
@@ -54,7 +53,7 @@
                 <v-spacer></v-spacer>
                 <div>
                   <h2>
-                    {{card.title}}
+                    {{product.name}}
                   </h2>
                 </div>
                 <v-spacer></v-spacer>
@@ -62,7 +61,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <h2>
-                  {{card.text}}
+                  {{product.model}} - Rs. {{product.cost}}
                 </h2>
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -75,13 +74,13 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: 'SubCategory',
     data () {
       return {
-        testresponse: '',
+        src: '/static/box-icon1.png',
         cards: [
           {title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home'},
           {title: 'Total Products', src: '/static/box-icon1.png', flex: 3, text: 'd', routeto: 'Login'},
@@ -109,13 +108,19 @@
       })
     },
     mounted () {
-      this.$store.dispatch('products/getAllProductsBySubCategory', {id: this.$route.params.id})
-      this.$store.dispatch('categories/getSubCategory', {id: this.$route.params.id})
+      this.getAllProductsBySubCategory({id: this.$route.params.id})
+      this.getSubCategory({id: this.$route.params.id})
     },
     beforeRouteUpdate (to, from, next) {
-      this.$store.dispatch('products/getAllProductsBySubCategory', {id: to.params.id})
-      this.$store.dispatch('categories/getSubCategory', {id: to.params.id})
+      this.getAllProductsBySubCategory({id: to.params.id})
+      this.getSubCategory({id: to.params.id})
       next()
+    },
+    methods: {
+      ...mapActions({
+        getAllProductsBySubCategory: 'products/getAllProductsBySubCategory',
+        getSubCategory: 'categories/getSubCategory'
+      })
     }
   }
 </script>

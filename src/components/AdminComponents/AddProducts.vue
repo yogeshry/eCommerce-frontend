@@ -7,7 +7,7 @@
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
                 <span class="headline">Add Product</span>
-                {{subCategory}}
+                {{subCategory}} <br/>{{brand}}
               </v-flex>
             </v-layout>
           </v-container>
@@ -40,16 +40,17 @@
                     overflow
                     clearable
                     required
+                    @click="getAllBrands"
                   ></v-overflow-btn>
                   <v-text-field
-                    v-model="productName"
+                    v-model="name"
                     :rules="rules"
                     :counter="255"
                     label="Product Name"
                     required
                   ></v-text-field>
                   <v-text-field
-                    v-model="productModel"
+                    v-model="model"
                     :rules="rules"
                     :counter="255"
                     label="Product Model"
@@ -71,11 +72,11 @@
                     required
                   ></v-textarea>
                   <v-textarea
-                    v-model="specification"
+                    v-model="specifications"
                     :rules="rules"
                     solo
                     name="input-7-4"
-                    label="Product Specification"
+                    label="Product Specifications"
                     required
                   ></v-textarea>
                   <v-text-field
@@ -112,35 +113,20 @@
                       <v-card-title>
                         <span class="headline">Add Brand</span>
                       </v-card-title>
-                      <v-form ref="form" v-model="addBrand">
+                      <v-form ref="formBrand" v-model="addBrand">
                         <v-card-text>
                           <v-layout>
-                            <v-select
-                              :items="dropdown_edit"
-                              :rules="rules"
-                              label="Category"
-                              required>
-                            </v-select>
-                          </v-layout>
-                          <v-layout>
-                            <v-select
-                              :items="dropdown_edit"
-                              :rules="rules"
-                              label="SubCategory"
-                              required>
-                            </v-select>
-                          </v-layout>
-                          <v-layout>
                             <v-text-field
+                              v-model="newBrandName"
                               :rules="rules"
-                              label="Brand"
+                              label="Name"
                               required
                             >
                             </v-text-field>
                           </v-layout>
                         </v-card-text>
                         <v-card-actions>
-                          <v-btn :disabled="!addBrand" @click.native="dialog = false">Add</v-btn>
+                          <v-btn :disabled="!addBrand" @click.native="addNewBrandConfirm">Add</v-btn>
                           <v-btn @click.native="dialog = false">Cancel</v-btn>
                         </v-card-actions>
                       </v-form>
@@ -153,11 +139,27 @@
         </v-card>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="10000"
+      :color="info"
+      multi-line
+      right
+    >
+      {{message}}
+      <v-btn
+        color="primary"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
-  import { mapState } from 'vuex'
+  import { mapActions, mapState } from 'vuex'
 
   export default {
     name: 'AddProducts',
@@ -166,6 +168,7 @@
         addBrand: true,
         addProducts: true,
         dialog: false,
+        snackbar: false,
         // dropdown_edit: [
         //   { text: 'Apple' },
         //   { text: 'Samsung' },
@@ -181,12 +184,16 @@
         //   {text: 'Xiaomi'}
         // ],
         subCategory: '',
+        newBrandName: '',
         brand: '',
-        productName: '',
-        productModel: '',
+        name: '',
+        model: '',
+        cost: 0,
+        inventory: 1,
+        specifications: '',
+        description: '',
         rules: [
-          v => !!v || 'This field is required',
-          v => /^\S*$/.test(v) || 'This field cannot contain spaces'
+          v => !!v || 'This field is required'
         ],
         costRules: [
           v => !!v || 'This field is required',
@@ -195,14 +202,33 @@
       }
     },
     methods: {
-      clear() {
+      ...mapActions({
+        addNewProduct: 'admin/addNewProduct',
+        addNewBrand: 'admin/addNewBrand',
+        getAllBrands: 'admin/getAllBrands'
+      }),
+      submit () {
+        if (this.$refs.form.validate()) {
+          this.addNewProduct({name: this.name, model: this.model, subCategoryId: this.subCategory.id, brandId: this.brand.id, cost: this.cost, description: this.description, specifications: this.specifications, inventory: this.inventory})
+        }
+        this.snackbar = true
+      },
+      clear () {
         this.$refs.form.reset()
+      },
+      addNewBrandConfirm () {
+        if (this.$refs.formBrand.validate()) {
+          this.addNewBrand(this.newBrandName)
+        }
+        this.dialog = false
+        this.snackbar = true
       }
     },
     computed: {
       ...mapState({
         subCategories: state => state.admin.allSubCategories,
-        brands: state => state.admin.allBrands
+        brands: state => state.admin.allBrands,
+        message: state => state.admin.message
       })
     }
   }

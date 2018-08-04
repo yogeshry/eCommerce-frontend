@@ -3,36 +3,46 @@ import api from '../../api/api'
 const state = {
   category: null,
   allSubCategories: [],
+  randomSubCategories: [],
   allBrands: [],
   message: null
 }
 
 const getters = {
-
 }
 
 const actions = {
-  addCategoryAdmin ({state, commit}, categorySubcategory) {
+  addCategoryAdmin ({ state, commit }, categorySubcategory) {
     api().post('admin/addCategory', categorySubcategory)
       .then(() => commit('setSuccessMessage'))
       .catch(() => commit('setFailureMessage'))
   },
-  getAllSubCategories ({state, commit}) {
+  getAllSubCategories ({ state, commit }) {
     api().get('subcategory')
       .then(r => {
         commit('setAllSubCategories', r.data)
       })
       .catch(() => commit('setFailureMessage'))
   },
-  getAllBrands ({state, commit}) {
+  getAllBrands ({ state, commit }) {
     api().get('brands')
       .then(r => {
         commit('setAllBrands', r.data._embedded.brands.map(brand => {
-          return {id: brand.id, name: brand.name}
+          return { id: brand.id, name: brand.name }
         }))
       })
       .catch(() => commit('setFailureMessage'))
-  }
+  },
+  addNewProduct ({ state, commit }, product) {
+    api().post('admin/addProduct', product)
+      .then(() => commit('setSuccessMessage'))
+      .catch(() => commit('setFailureMessage'))
+  },
+  addNewBrand ({ state, commit }, brandName) {
+    api().post('brands', { name: brandName })
+      .then(() => commit('setSuccessMessage'))
+      .catch(() => commit('setFailureMessage'))
+  },
 }
 
 const mutations = {

@@ -16,15 +16,15 @@
       >
         <v-layout row wrap>
           <v-flex
-            v-for="card in cards"
-            v-bind="{ [`xs${card.flex}`]: true }"
-            :key="card.title"
+            v-for="item in listOfSmartPhones"
+            v-bind="{ [`xs3`]: true }"
+            :key="item.id"
           >
             <v-card
               hover
-              :to="{name:card.routeto}">
+              :to="{name: 'ProductDetail', params: {id: item.id}}">
               <v-card-media
-                :src="card.src"
+                :src="src"
                 height="150px"
               >
                 <v-container
@@ -38,7 +38,7 @@
                 <v-spacer></v-spacer>
                 <div>
                   <h2>
-                    {{card.title}}
+                    {{item.name}}
                   </h2>
                 </div>
                 <v-spacer></v-spacer>
@@ -46,7 +46,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <h2>
-                  {{card.text}}
+                  {{item.model}}
                 </h2>
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -64,15 +64,15 @@
       >
         <v-layout row wrap>
           <v-flex
-            v-for="card in cards"
-            v-bind="{ [`xs${card.flex}`]: true }"
-            :key="card.title"
+            v-for="item in listOfFeaturePhones"
+            v-bind="{ [`xs3`]: true }"
+            :key="item.id"
           >
             <v-card
               hover
-              :to="{name:card.routeto}">
+              :to="{name: 'ProductDetail', params: {id: item.id}}">
               <v-card-media
-                :src="card.src"
+                :src="src"
                 height="150px"
               >
                 <v-container
@@ -86,7 +86,7 @@
                 <v-spacer></v-spacer>
                 <div>
                   <h2>
-                    {{card.title}}
+                    {{item.name}}
                   </h2>
                 </div>
                 <v-spacer></v-spacer>
@@ -94,7 +94,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <h2>
-                  {{card.text}}
+                  {{item.model}}
                 </h2>
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -111,15 +111,15 @@
       >
         <v-layout row wrap>
           <v-flex
-            v-for="card in cards"
-            v-bind="{ [`xs${card.flex}`]: true }"
-            :key="card.title"
+            v-for="item in listOfTablets"
+            v-bind="{ [`xs3`]: true }"
+            :key="item.id"
           >
             <v-card
               hover
-              :to="{name:card.routeto}">
+              :to="{name: 'ProductDetail', params: {id: item.id}}">
               <v-card-media
-                :src="card.src"
+                :src="src"
                 height="150px"
               >
                 <v-container
@@ -133,7 +133,7 @@
                 <v-spacer></v-spacer>
                 <div>
                   <h2>
-                    {{card.title}}
+                    {{item.name}}
                   </h2>
                 </div>
                 <v-spacer></v-spacer>
@@ -141,7 +141,7 @@
               <v-card-actions>
                 <v-spacer></v-spacer>
                 <h2>
-                  {{card.text}}
+                  {{item.model}}
                 </h2>
                 <v-spacer></v-spacer>
               </v-card-actions>
@@ -154,6 +154,8 @@
 </template>
 
 <script>
+  import { mapActions, mapState } from 'vuex'
+
   export default {
     name: 'Home',
     data () {
@@ -172,17 +174,39 @@
             src: '/static/iphonexbanner.png'
           }
         ],
+        src: '/static/box-icon1.png',
         cards: [
-          {title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home'},
-          {title: 'Total Products', src: '/static/box-icon1.png', flex: 3, text: 'd', routeto: 'Login'},
-          {title: 'Total Categories', src: '/static/images2.png', flex: 3, text: 'd', routeto: 'ProductDetail'},
-          {title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home'},
+          { title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home' },
+          { title: 'Total Products', src: '/static/box-icon1.png', flex: 3, text: 'd', routeto: 'Login' },
+          { title: 'Total Categories', src: '/static/images2.png', flex: 3, text: 'd', routeto: 'ProductDetail' },
+          { title: 'Total Users', src: '/static/images1.png', flex: 3, text: '2000', routeto: 'Home' }
         ],
         itemss: [
-          {text: 'Price high to low'},
-          {text: 'Price low to high'}
-        ]
+          { text: 'Price high to low' },
+          { text: 'Price low to high' }
+        ],
+        listOfSmartPhones: [],
+        listOfFeaturePhones: [],
+        listOfTablets: []
       }
+    },
+    methods: {
+      ...mapActions({
+        getAllProductsBySubCategory: 'products/getAllProductsBySubCategory'
+      })
+    },
+    computed: {
+      ...mapState({
+        allBySubCategory: 'products/allBySubCategory'
+      })
+    },
+    mounted () {
+      this.getAllProductsBySubCategory(2)
+      this.listOfSmartPhones = this.allBySubCategory
+      this.getAllProductsBySubCategory(3)
+      this.listOfFeaturePhones = this.allBySubCategory
+      this.getAllProductsBySubCategory(4)
+      this.listOfTablets = this.allBySubCategory
     }
   }
 </script>
