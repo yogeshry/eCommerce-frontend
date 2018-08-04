@@ -107,7 +107,8 @@
 
 <script>
   // import base from '../api/base'
-  import {mapState, mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
+
   export default {
     name: 'signup',
     data: () => ({
@@ -146,14 +147,14 @@
     }),
     mounted () {
       if (this.isAuthenticated) {
-        this.$router.push({name: 'Home'})
+        this.$router.push({ name: 'Home' })
       } else {
-        this.$router.replace({name: 'Signup'})
+        this.$router.replace({ name: 'Signup' })
       }
     },
     watch: {
       isRegistered: function (val) {
-        if (val) this.$router.push({name: 'Login'})
+        if (val) this.$router.push({ name: 'Login' })
       }
     },
     computed: {
@@ -166,7 +167,18 @@
       submit () {
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
-          this.$store.dispatch('auth/signUp', {username: this.username.toLowerCase(), password: this.password, firstName: this.firstName, middleName: this.middleName, lastName: this.lastName, email: this.email, phoneNumber1: this.phone1, phoneNumber2: this.phone2, address1: this.address1, address2: this.address2})
+          this.$store.dispatch('auth/signUp', {
+            username: this.username.toLowerCase(),
+            password: this.password,
+            firstName: this.firstName,
+            middleName: this.middleName,
+            lastName: this.lastName,
+            email: this.email,
+            phoneNumber1: this.phone1,
+            phoneNumber2: this.phone2,
+            address1: this.address1,
+            address2: this.address2
+          })
         }
       },
       clear () {

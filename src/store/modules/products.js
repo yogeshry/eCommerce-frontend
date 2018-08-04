@@ -3,6 +3,7 @@ import api from '../../api/api'
 const state = {
   all: [],
   allBySubCategory: [],
+  allByIds: [],
   product: null
 }
 

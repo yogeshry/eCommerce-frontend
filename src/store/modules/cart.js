@@ -1,27 +1,27 @@
 import shop from '../../api/shop'
+import api from '../../api/api'
 
 // initial state
 // shape: [{ id, quantity }]
 const state = {
   items: [],
-  checkoutStatus: null
+  cartProducts: [],
+  checkoutStatus: null,
+  cartAddStatus: null,
+  status: null
 }
 
 // getters
 const getters = {
-  cartProducts: (state, getters, rootState) => {
-    return state.items.map(({ id, quantity }) => {
-      const product = rootState.products.all.find(product => product.id === id)
-      return {
-        title: product.title,
-        price: product.price,
-        quantity
-      }
-    })
+
+  cartTotalItem: (state) => {
+    return state.items.reduce((total, item) => {
+      return total + item.quantity
+    }, 0)
   },
 
-  cartTotalPrice: (state, getters) => {
-    return getters.cartProducts.reduce((total, product) => {
+  cartTotalPrice: (state) => {
+    return state.cartProducts.reduce((total, product) => {
       return total + product.price * product.quantity
     }, 0)
   }
@@ -29,6 +29,13 @@ const getters = {
 
 // actions
 const actions = {
+  getCartProducts ({ commit, state }) {
+    state.items.forEach((item) => {
+      api().get(`api/products/${item.productId}`)
+        .then(r => commit('setCartProducts', r.data))
+        .catch(() => commit('setStatus', 'Cannot get products'))
+    })
+  },
   checkout ({ commit, state }, products) {
     const savedCartItems = [...state.items]
     commit('setCheckoutStatus', null)
@@ -45,23 +52,31 @@ const actions = {
     )
   },
 
-  addProductToCart ({ state, commit }, product) {
+  addProductToCart ({ state, commit }, payload) {
     commit('setCheckoutStatus', null)
-    if (product.inventory > 0) {
-      const cartItem = state.items.find(item => item.id === product.id)
-      if (!cartItem) {
-        commit('pushProductToCart', { id: product.id })
-      } else {
-        commit('incrementItemQuantity', cartItem)
-      }
-      // remove 1 item from stock
-      commit('products/decrementProductInventory', { id: product.id }, { root: true })
+    const cartItem = state.items.find(
+      item => item.productId === payload.productId)
+    if (!cartItem) {
+      commit('pushProductToCart',
+        { productId: payload.productId, userId: payload.userId })
+    } else {
+      commit('incrementItemQuantity', cartItem)
     }
+    const newItem = state.items.find(
+      item => item.productId === payload.productId)
+    api()
+      .post('addToCart', newItem)
+      .then(() => commit('setCartAddStatus', 'Success'))
+      .catch(() => commit('setCartAddStatus', 'Failed'))
   }
 }
 
 // mutations
 const mutations = {
+  setCartProducts (state, { product }) {
+    if (!JSON.stringify(state.items).includes(JSON.stringify(product))) state.cartProducts.push(product)
+  },
+
   pushProductToCart (state, { id }) {
     state.items.push({
       id,
@@ -69,8 +84,12 @@ const mutations = {
     })
   },
 
-  incrementItemQuantity (state, { id }) {
-    const cartItem = state.items.find(item => item.id === id)
+  setStatus (state, { status }) {
+    state.status = state
+  },
+
+  incrementItemQuantity (state, { productId }) {
+    const cartItem = state.items.find(item => item.productId === productId)
     cartItem.quantity++
   },
 
@@ -80,6 +99,10 @@ const mutations = {
 
   setCheckoutStatus (state, status) {
     state.checkoutStatus = status
+  },
+
+  setCartAddStatus (state, cartAddStatus) {
+    state.cartAddStatus = cartAddStatus
   }
 }
 
