@@ -57,7 +57,7 @@
         </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
       <span v-if="authenticated !== 'true' "><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
-      <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logoutUser">Logout</v-btn></span>
+      <span v-else><v-btn :to="{name: 'Profile'}">My Account</v-btn> <v-btn @click="logoutUser">Logout</v-btn></span>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>

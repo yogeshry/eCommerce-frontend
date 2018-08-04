@@ -17,6 +17,7 @@ import ViewOrders from '@/components/AdminComponents/ViewOrders'
 import ViewCart from '@/components/AdminComponents/ViewCart'
 import AddAdmin from '@/components/AdminComponents/AddAdmin'
 import ViewAdmin from '@/components/AdminComponents/ViewAdmin'
+import Profile from '@/components/Profile'
 
 Vue.use(Router)
 
@@ -43,6 +44,12 @@ export default new Router({
       path: '/sc/:id',
       name: 'SubCategory',
       component: SubCategory,
+      props: true
+    },
+    {
+      path: '/profile',
+      name: 'Profile',
+      component: Profile,
       props: true
     },
     {
