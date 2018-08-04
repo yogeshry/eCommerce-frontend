@@ -34,13 +34,13 @@
                   </v-btn>
                   <v-list>
                     <v-list-tile
-                      v-for="(input, index) in inputs"
-                      :key="subcategory">
+                      v-for="(subCategory, i) in subCategories"
+                      :key="i">
                         <v-text-field
                           append-outer-icon="mdi-minus"
-                          @click:append-outer="deleteRow(index)"
-                          v-model="input.one" label="SubCategory"
-                        > - {{ input.one }}
+                          @click:append-outer="deleteRow(i)"
+                          v-model="subCategory.name" label="SubCategory"
+                        >
                         </v-text-field>
                     </v-list-tile>
                   </v-list>
@@ -52,16 +52,36 @@
                   </v-btn>
                   <v-btn @click="clear">clear</v-btn>
                 </v-form>
+                {{category}}
+                {{categoryIcon}}
+                {{subCategories}}
               </v-flex>
             </v-layout>
           </v-card-text>
         </v-card>
       </v-flex>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="10000"
+      :color="info"
+      multi-line
+      right
+    >
+      {{message}}
+      <v-btn
+        color="primary"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+  import {mapActions, mapState} from 'vuex'
   export default {
     name: 'AddCategories',
     data () {
@@ -69,26 +89,40 @@
         addCategory: true,
         category: '',
         categoryIcon: '',
+        snackbar: false,
         Rules: [
           v => !!v || 'This field is required',
-          v => (v && v.length <= 255) || 'This field must be less than 255 characters',
-          v => /^\S*$/.test(v) || 'This field cannot contain spaces'
+          v => (v && v.length <= 255) || 'This field must be less than 255 characters'
         ],
-        inputs: []
+        subCategories: []
       }
     },
+    computed: {
+      ...mapState({
+        message: state => state.admin.message
+      })
+    },
     methods: {
+      ...mapActions({
+        addCategoryAdmin: 'admin/addCategoryAdmin'
+      }),
       addSubCategory () {
-        this.inputs.push({
-          one: ''
+        this.subCategories.push({
+          name: ''
         })
       },
       deleteRow (i) {
-        this.inputs.splice(i, 1)
+        this.subCategories.splice(i, 1)
+      },
+      submit () {
+        if (this.$refs.form.validate()) {
+          this.addCategoryAdmin({categoryName: this.category, categoryIcon: this.categoryIcon, names: this.subCategories})
+        }
+        this.snackbar = true
       },
       clear () {
         this.$refs.form.reset()
-        this.inputs.splice(0, this.inputs.length)
+        this.subCategories.splice(0, this.subCategories.length)
       }
     }
   }

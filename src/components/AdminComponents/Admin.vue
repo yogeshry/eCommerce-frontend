@@ -4,7 +4,6 @@
       persistent
       clipped
       v-model="drawer"
-      enable-resize-watcher
       fixed
       app
     >
@@ -57,7 +56,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import {mapActions, mapState} from 'vuex'
   // import api from './api/api'
   export default {
     name: 'Admin',
@@ -97,8 +96,10 @@
       }
     },
     mounted () {
-      this.$store.dispatch('auth/getAuthenticationState')
-      this.$store.dispatch('categories/getAllCategories')
+      this.getAuthenticationState()
+      this.getAllCategories()
+      this.getAllSubCategories()
+      this.getAllBrands()
     },
 
     /*
@@ -113,9 +114,17 @@
       authenticated: state => state.auth.authenticated
     }),
     methods: {
+      ...mapActions({
+        logoutUser: 'auth/logout',
+        getAuthenticationState: 'auth/getAuthenticationState',
+        getAllCategories: 'categories/getAllCategories',
+        getAllSubCategories: 'admin/getAllSubCategories',
+        getAllBrands: 'admin/getAllBrands'
+      }),
       logout () {
-        this.$store.dispatch('auth/logout')
+        this.logoutUser()
         this.$router.push({name: 'Admin'})
+        this.$router.go(0)
       }
     }
   }

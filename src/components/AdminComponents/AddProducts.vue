@@ -7,6 +7,7 @@
             <v-layout fill-height>
               <v-flex xs12 align-end flexbox>
                 <span class="headline">Add Product</span>
+                {{subCategory}}
               </v-flex>
             </v-layout>
           </v-container>
@@ -14,32 +15,42 @@
             <v-layout>
               <v-flex>
                 <v-form ref="form" v-model="addProducts">
-                  <v-select
+                  <v-overflow-btn
                     v-model="subCategory"
-                    :items="items"
+                    :items="subCategories"
                     :rules="Rules"
                     label="SubCategory"
+                    item-text="name"
+                    item-value="id"
+                    return-object
                     required
-                  ></v-select>
+                    editable
+                    overflow
+                    clearable
+                  ></v-overflow-btn>
                   <v-overflow-btn
                     v-model="brand"
-                    :items="dropdown_edit"
-                    :rules="Rules"
+                    :items="brands"
+                    :rules="rules"
                     editable
+                    item-text="name"
+                    item-value="id"
                     label="Brand"
+                    return-object
                     overflow
+                    clearable
                     required
                   ></v-overflow-btn>
                   <v-text-field
                     v-model="productName"
-                    :rules="Rules"
+                    :rules="rules"
                     :counter="255"
                     label="Product Name"
                     required
                   ></v-text-field>
                   <v-text-field
                     v-model="productModel"
-                    :rules="Rules"
+                    :rules="rules"
                     :counter="255"
                     label="Product Model"
                     required
@@ -48,11 +59,12 @@
                     v-model="cost"
                     :rules="costRules"
                     label="Cost (Rs.)"
+                    type="number"
                     required
                   ></v-text-field>
                   <v-textarea
                     v-model="description"
-                    :rules="Rules"
+                    :rules="rules"
                     solo
                     name="input-7-4"
                     label="Product Description"
@@ -60,7 +72,7 @@
                   ></v-textarea>
                   <v-textarea
                     v-model="specification"
-                    :rules="Rules"
+                    :rules="rules"
                     solo
                     name="input-7-4"
                     label="Product Specification"
@@ -70,6 +82,7 @@
                     v-model="inventory"
                     :rules="costRules"
                     label="Inventory"
+                    type="number"
                     required
                   ></v-text-field>
                   <v-layout>
@@ -104,7 +117,7 @@
                           <v-layout>
                             <v-select
                               :items="dropdown_edit"
-                              :rules="Rules"
+                              :rules="rules"
                               label="Category"
                               required>
                             </v-select>
@@ -112,14 +125,14 @@
                           <v-layout>
                             <v-select
                               :items="dropdown_edit"
-                              :rules="Rules"
+                              :rules="rules"
                               label="SubCategory"
                               required>
                             </v-select>
                           </v-layout>
                           <v-layout>
                             <v-text-field
-                              :rules="Rules"
+                              :rules="rules"
                               label="Brand"
                               required
                             >
@@ -144,6 +157,8 @@
 </template>
 
 <script>
+  import { mapState } from 'vuex'
+
   export default {
     name: 'AddProducts',
     data () {
@@ -151,38 +166,44 @@
         addBrand: true,
         addProducts: true,
         dialog: false,
-        dropdown_edit: [
-          {text: 'Apple'},
-          {text: 'Samsung'},
-          {text: 'LG'},
-          {text: 'Huawei'},
-          {text: 'Xiaomi'}
-        ],
-        items: [
-          {text: 'Apple'},
-          {text: 'Samsung'},
-          {text: 'LG'},
-          {text: 'Huawei'},
-          {text: 'Xiaomi'}
-        ],
+        // dropdown_edit: [
+        //   { text: 'Apple' },
+        //   { text: 'Samsung' },
+        //   { text: 'LG' },
+        //   { text: 'Huawei' },
+        //   { text: 'Xiaomi' }
+        // ],
+        // items: [
+        //   {text: 'Apple'},
+        //   {text: 'Samsung'},
+        //   {text: 'LG'},
+        //   {text: 'Huawei'},
+        //   {text: 'Xiaomi'}
+        // ],
         subCategory: '',
+        brand: '',
         productName: '',
         productModel: '',
-        Rules: [
+        rules: [
           v => !!v || 'This field is required',
-          v => (v && v.length <= 255) || 'This field must be less than 255 characters',
           v => /^\S*$/.test(v) || 'This field cannot contain spaces'
         ],
         costRules: [
           v => !!v || 'This field is required',
-          v => /^[0-9]*$/.test(v) || 'This field must contains digit only'
+          v => v > 0 || 'This field must be positive'
         ]
       }
     },
     methods: {
-      clear () {
+      clear() {
         this.$refs.form.reset()
       }
+    },
+    computed: {
+      ...mapState({
+        subCategories: state => state.admin.allSubCategories,
+        brands: state => state.admin.allBrands
+      })
     }
   }
 </script>
