@@ -20,7 +20,7 @@
           <v-list-tile
             v-for="(subItem,i) in item.subItems"
             :key="i"
-            to="#"
+            :to="{name: subItem.url}"
             ripple
           >
             <v-list-tile-title v-text="subItem.name"></v-list-tile-title>
@@ -70,9 +70,8 @@
           'name': 'Add',
           'icon': 'mdi-library-plus',
           'subItems': [
-            {'id': '202', 'name': 'Categories', 'url': 'AddCategories'},
-            {'id': '98', 'name': 'Products', 'url': 'AddProducts'},
-            {'id': '201', 'name': 'SubCategories', 'url': 'AddSubCategories'}
+            {'name': 'Categories', 'url': 'AddCategories'},
+            {'name': 'Products', 'url': 'AddProducts'},
           ]
         },
         {

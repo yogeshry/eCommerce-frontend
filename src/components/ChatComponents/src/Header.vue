@@ -33,7 +33,7 @@ export default {
   min-height: 40px;
   border-top-left-radius: 9px;
   border-top-right-radius: 9px;
-  padding: px;
+  padding: 1px;
   box-shadow: 0 1px 4px rgba(0,0,0,.2);
   position: relative;
   box-sizing: border-box;

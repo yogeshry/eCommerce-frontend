@@ -1,6 +1,7 @@
 <template>
 <v-container>
   <v-layout row wrap>
+    <v-flex></v-flex>
     <v-flex>
       <img src="/static/iphone8.png"/>
     </v-flex>
@@ -11,17 +12,39 @@
         </h1>
         </v-flex>
       </v-layout>
+      <br>
+      <hr>
+      <br>
       <v-layout>
         <v-flex fill-height>
+          <h2>
+          Description
+          </h2>
+            <br>
           {{product.description}}
+          <br>
+          <br>
+          <br>
+          <br>
         </v-flex>
       </v-layout>
+      <br>
+      <hr>
+      <br>
       <v-layout>
         <v-flex>
-          {{product.cost}}
+          <h2>
+         Rs. {{product.cost}}
+          </h2>
+        </v-flex>
+        <v-flex xs4>
+          <v-btn color="primary">
+            Add to cart
+        </v-btn>
         </v-flex>
       </v-layout>
     </v-flex>
+    <v-flex></v-flex>
   </v-layout>
 </v-container>
 </template>
