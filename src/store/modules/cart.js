@@ -5,6 +5,7 @@ import api from '../../api/api'
 // shape: [{ id, quantity }]
 const state = {
   items: [],
+  cartItems: [],
   cartProducts: [],
   checkoutStatus: null,
   cartAddStatus: null,
@@ -13,8 +14,7 @@ const state = {
 
 // getters
 const getters = {
-
-  cartTotalItem: (state) => {
+  cartTotalItems: (state) => {
     return state.items.reduce((total, item) => {
       return total + item.quantity
     }, 0)
@@ -52,20 +52,27 @@ const actions = {
     )
   },
 
-  addProductToCart ({ state, commit }, payload) {
+  getCartItems ({ state, commit, rootState }) {
+    api().get(`order/cartItem/${rootState.auth.username}`)
+      .then(r => {
+        commit('setCartItems', r.data)
+      })
+      .catch(() => commit('setStatus', 'Cannot get cart items'))
+    // commit('setCartItems', {items})
+  },
+  addProductToCart ({ state, commit, rootState }, productId) {
     commit('setCheckoutStatus', null)
     const cartItem = state.items.find(
-      item => item.productId === payload.productId)
+      item => item.productId === productId)
     if (!cartItem) {
-      commit('pushProductToCart',
-        { productId: payload.productId, userId: payload.userId })
+      commit('pushProductToCart', { productId: productId, username: rootState.auth.username })
     } else {
       commit('incrementItemQuantity', cartItem)
     }
     const newItem = state.items.find(
-      item => item.productId === payload.productId)
+      item => item.productId === productId)
     api()
-      .post('addToCart', newItem)
+      .post('/order/addToCart', newItem)
       .then(() => commit('setCartAddStatus', 'Success'))
       .catch(() => commit('setCartAddStatus', 'Failed'))
   }
@@ -77,23 +84,24 @@ const mutations = {
     if (!JSON.stringify(state.items).includes(JSON.stringify(product))) state.cartProducts.push(product)
   },
 
-  pushProductToCart (state, { id }) {
+  pushProductToCart (state, payload) {
     state.items.push({
-      id,
+      productId: payload.productId,
+      username: payload.username,
       quantity: 1
     })
   },
 
-  setStatus (state, { status }) {
-    state.status = state
+  setStatus (state, status) {
+    state.status = status
   },
 
-  incrementItemQuantity (state, { productId }) {
-    const cartItem = state.items.find(item => item.productId === productId)
+  incrementItemQuantity (state, cart) {
+    const cartItem = state.items.find(item => item.productId === cart.productId)
     cartItem.quantity++
   },
 
-  setCartItems (state, { items }) {
+  setCartItems (state, items) {
     state.items = items
   },
 

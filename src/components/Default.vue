@@ -52,13 +52,13 @@
       ></v-text-field>
       <v-spacer></v-spacer>
       <v-badge overlap>
-        <span slot="badge">0</span>
+        <span slot="badge">{{ totalCartItems }}</span>
         <v-icon large @click="goToCart">
           mdi-cart
         </v-icon>
       </v-badge>&nbsp; &nbsp; &nbsp;
       <span v-if="authenticated !== 'true' "><v-btn :to="{name:'Login'}">Login </v-btn>OR <v-btn :to="{name: 'Signup'}">Signup </v-btn></span>
-      <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logout">Logout</v-btn></span>
+      <span v-else><v-btn :to="{name: 'Home'}">My Account</v-btn> <v-btn @click="logoutUser">Logout</v-btn></span>
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
@@ -76,7 +76,7 @@
           Close
         </v-btn>
       </v-snackbar>
-      {{username}} {{authenticated}} {{jwt}}
+      {{userId}}{{ username }} {{authenticated}} {{jwt}}
       <slot/>
     </v-content>
     <div>
@@ -102,7 +102,7 @@
 </template>
 
 <script>
-  import {mapState} from 'vuex'
+  import { mapActions, mapGetters, mapState } from 'vuex'
   import api from '../api/chatApi'
   // import api from './api/api'
   export default {
@@ -124,31 +124,45 @@
       }
     },
     mounted () {
-      this.$store.dispatch('auth/getAuthenticationState')
-      this.$store.dispatch('categories/getAllCategories')
+      this.getAuthenticationState()
+      this.getAllCategories()
+      this.getCartItems(this.userId)
     },
-
     /*
     mounted () {
       api().get('category').then(response => {this.items = response.data})
     },
     */
-    computed: mapState({
-      categories: state => state.categories.all,
-      username: state => state.auth.username,
-      jwt: state => state.auth.token,
-      authenticated: state => state.auth.authenticated
-    }),
+    computed: {
+      ...mapGetters({
+        cartItems: 'cart/cartItems',
+        totalCartItems: 'cart/cartTotalItems'
+      }),
+      ...mapState({
+        categories: state => state.categories.all,
+        userId: state => state.auth.userId,
+        username: state => state.auth.username,
+        jwt: state => state.auth.token,
+        authenticated: state => state.auth.authenticated
+      })
+    },
     methods: {
+      ...mapActions({
+        getAuthenticationState: 'auth/getAuthenticationState',
+        getAllCategories: 'categories/getAllCategories',
+        logout: 'auth/logout',
+        getCartItems: 'cart/getCartItems'
+      }),
       searchItem () {
         this.snackbar = true
       },
       goToCart () {
-        this.$router.push({name: 'Cart'})
+        this.$router.push({ name: 'Cart' })
       },
-      logout () {
-        this.$store.dispatch('auth/logout')
-        this.$router.push({name: 'Home'})
+      logoutUser () {
+        this.logout()
+        this.$router.push({ name: 'Home' })
+        this.$router.go(0)
       },
       sendMessage (message) {
         if (this.text.length > 0) {

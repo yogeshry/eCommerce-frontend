@@ -1,4 +1,5 @@
 import base from '../../api/base'
+import api from '../../api/api'
 // import api from '../../api/api'
 
 const state = {
@@ -14,19 +15,19 @@ const getters = {
 }
 
 const actions = {
-  getAuthenticationState ({commit}) {
+  getAuthenticationState ({ commit }) {
     if (!localStorage.getItem('isAuthenticated')) {
       commit('removeJwtToken')
     }
   },
-  getJwtToken ({commit}, user) {
+  getJwtToken ({ commit, dispatch }, user) {
     base().post('login', user)
       .then(r => r.headers.authorization)
       .then(token => {
-        commit('setJwtToken', {user, token})
+        commit('setJwtToken', { user, token })
       })
   },
-  signUp ({commit}, user) {
+  signUp ({ commit }, user) {
     if (!localStorage.getItem('isAuthenticated')) {
       commit('removeJwtToken')
     }
@@ -39,13 +40,13 @@ const actions = {
         commit('setMessage', err.status)
       })
   },
-  logout ({commit}) {
+  logout ({ commit }) {
     commit('removeJwtToken')
   }
 }
 
 const mutations = {
-  setJwtToken (state, {user, token}) {
+  setJwtToken (state, { user, token }) {
     localStorage.setItem('username', user.username)
     localStorage.setItem('jwtEcommerceToken', token)
     localStorage.setItem('isAuthenticated', 'true')

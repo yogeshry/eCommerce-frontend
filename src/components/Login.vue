@@ -48,7 +48,7 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
+  import { mapGetters } from 'vuex'
 
   export default {
     name: 'Login',
@@ -70,14 +70,17 @@
     }),
     mounted () {
       if (this.isAuthenticated) {
-        this.$router.push({name: 'Home'})
+        this.$router.push({ name: 'Home' })
       } else {
-        this.$router.replace({name: 'Login'})
+        this.$router.replace({ name: 'Login' })
       }
     },
     watch: {
       isAuthenticated: function (val) {
-        if (val) this.$router.push({name: 'Home'})
+        if (val) {
+          this.$router.push({ name: 'Home' })
+          this.$router.go(0)
+        }
       }
     },
     computed: {
@@ -89,16 +92,16 @@
       submit () {
         if (this.$refs.form.validate()) {
           // Native form submission is not yet supported
-          this.$store.dispatch('auth/getJwtToken', {username: this.username, password: this.password})
+          this.$store.dispatch('auth/getJwtToken', { username: this.username, password: this.password })
           this.loginStatus = this.isAuthenticated ? 'Redirecting to homepage' : 'Wrong Credentials Provided'
         }
       },
       refresh () {
         this.$store.dispatch('auth/getAuthenticationState')
         if (this.isAuthenticated) {
-          this.$router.push({name: 'Home'})
+          this.$router.push({ name: 'Home' })
         } else {
-          this.$router.replace({name: 'Login'})
+          this.$router.replace({ name: 'Login' })
         }
       },
       clear () {
