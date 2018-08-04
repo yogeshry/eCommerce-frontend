@@ -4,7 +4,6 @@
       persistent
       clipped
       v-model="drawer"
-      enable-resize-watcher
       fixed
       app
     >

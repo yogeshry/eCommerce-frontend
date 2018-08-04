@@ -71,7 +71,7 @@
           'icon': 'mdi-library-plus',
           'subItems': [
             {'name': 'Categories', 'url': 'AddCategories'},
-            {'name': 'Products', 'url': 'AddProducts'},
+            {'name': 'Products', 'url': 'AddProducts'}
           ]
         },
         {
@@ -80,7 +80,6 @@
           'subItems': [
               {'id': '10', 'name': 'Categories', 'url': 'ViewCategories'},
               {'id': '11', 'name': 'Products', 'url': 'ViewProducts'},
-              {'id': '13', 'name': 'SubCategories', 'url': 'ViewSubCategories'},
               {'id': '15', 'name': 'Users', 'url': 'ViewUsers'},
               {'id': '17', 'name': 'Orders', 'url': 'ViewOrders'},
               {'id': '19', 'name': 'Cart', 'url': 'ViewCart'}

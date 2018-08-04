@@ -13,51 +13,39 @@
           <v-card-text>
             <v-layout>
               <v-flex>
-                <v-form ref="form" v-model="AddCategories" lazy-validation>
+                <v-form ref="form" v-model="addCategory">
                   <v-text-field
-                    v-model="Category"
-                    :rules="CategoryRules"
+                    v-model="category"
+                    :rules="Rules"
                     :counter="255"
                     label="Category"
                     required
                   ></v-text-field>
                   <v-text-field
-                    v-model="CategoryIcon"
-                    :rules="CategoryRules"
+                    v-model="categoryIcon"
+                    :rules="Rules"
                     :counter="255"
                     label="Category Icon"
                     required
                   ></v-text-field>
                   <v-btn
-                    @click="addSubCategory">
+                    @click.stop="addSubCategory">
                     Add SubCategory
                   </v-btn>
-                  <!--<v-text-field-->
-                  <!--v-model="SubCategory"-->
-                  <!--:rules="SubCategoryRules"-->
-                  <!--append-outer-icon="mdi-playlist-plus"-->
-                  <!--@click:append-outer="addSubCategory"-->
-                  <!--counter="255"-->
-                  <!--hint="At Least 8 Characters"-->
-                  <!--label="SubCategory"-->
-                  <!--required-->
-                  <!--&gt;-->
-                  <!--</v-text-field>-->
                   <v-list>
                     <v-list-tile
                       v-for="(input, index) in inputs"
-                      :key="SubCategory">
-                      <div>
+                      :key="subcategory">
                         <v-text-field
                           append-outer-icon="mdi-minus"
                           @click:append-outer="deleteRow(index)"
-                          v-model="input.one" label="SubCategory"> - {{ input.one }}
+                          v-model="input.one" label="SubCategory"
+                        > - {{ input.one }}
                         </v-text-field>
-                      </div>
                     </v-list-tile>
                   </v-list>
                   <v-btn
-                    :disabled="!AddCategories"
+                    :disabled="!addCategory"
                     @click="submit"
                   >
                     submit
@@ -68,7 +56,6 @@
             </v-layout>
           </v-card-text>
         </v-card>
-        {{loginStatus}}
       </v-flex>
     </v-layout>
   </v-container>
@@ -79,10 +66,10 @@
     name: 'AddCategories',
     data () {
       return {
-        AddCategories: true,
-        Category: '',
-        CategoryIcon: '',
-        CategoryRules: [
+        addCategory: true,
+        category: '',
+        categoryIcon: '',
+        Rules: [
           v => !!v || 'This field is required',
           v => (v && v.length <= 255) || 'This field must be less than 255 characters',
           v => /^\S*$/.test(v) || 'This field cannot contain spaces'
