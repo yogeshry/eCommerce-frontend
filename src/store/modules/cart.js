@@ -9,6 +9,7 @@ const state = {
   cartProducts: [],
   checkoutStatus: null,
   cartAddStatus: null,
+  cartRemoveStatus: null,
   status: null
 }
 
@@ -36,20 +37,24 @@ const actions = {
         .catch(() => commit('setStatus', 'Cannot get products'))
     })
   },
-  checkout ({ commit, state }, products) {
-    const savedCartItems = [...state.items]
-    commit('setCheckoutStatus', null)
-    // empty cart
-    commit('setCartItems', { items: [] })
-    shop.buyProducts(
-      products,
-      () => commit('setCheckoutStatus', 'successful'),
-      () => {
-        commit('setCheckoutStatus', 'failed')
-        // rollback to the cart saved before sending the request
-        commit('setCartItems', { items: savedCartItems })
-      }
-    )
+  // checkout ({ commit, state }, products) {
+  //   const savedCartItems = [...state.items]
+  //   commit('setCheckoutStatus', null)
+  //   // empty cart
+  //   commit('setCartItems', { items: [] })
+  //   shop.buyProducts(
+  //     products,
+  //     () => commit('setCheckoutStatus', 'successful'),
+  //     () => {
+  //       commit('setCheckoutStatus', 'failed')
+  //       // rollback to the cart saved before sending the request
+  //       commit('setCartItems', { items: savedCartItems })
+  //     }
+  //   )
+  // },
+
+  checkout ({commit, state}) {
+
   },
 
   getCartItems ({ state, commit, rootState }) {
@@ -75,6 +80,18 @@ const actions = {
       .post('/order/addToCart', newItem)
       .then(() => commit('setCartAddStatus', 'Success'))
       .catch(() => commit('setCartAddStatus', 'Failed'))
+  },
+  removeItemFromCart ({state, commit, rootState}, productId) {
+    api()
+      .get(`order/removeCartItem/${rootState.auth.username}/${productId}`)
+      .then(() => commit('setCartRemoveStatus', 'Success'))
+      .catch(() => commit('setCartRemoveStatus', 'Failed'))
+  },
+  removeAllItemsFromCart ({state, commit, rootState}) {
+    api()
+      .get(`order/removeAllCartItems/${rootState.auth.username}`)
+      .then(() => commit('setCartRemoveStatus', 'Success'))
+      .catch(() => commit('setCartRemoveStatus', 'Failed'))
   }
 }
 
@@ -111,6 +128,9 @@ const mutations = {
 
   setCartAddStatus (state, cartAddStatus) {
     state.cartAddStatus = cartAddStatus
+  },
+  setCartRemoveStatus (state, cartRemoveStatus) {
+    state.cartRemoveStatus = cartRemoveStatus
   }
 }
 
