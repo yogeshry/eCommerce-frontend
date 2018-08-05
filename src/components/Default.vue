@@ -181,6 +181,7 @@
               }
             }
             this.messageList.push(message)
+            if (response.data === 'ok lets checkout' || response.data === 'ok lets see cart') { this.$router.push({name: 'Cart'}) }
             // this.$emit('messageSent', {
             //   author: 'them',
             //   type: 'text',
