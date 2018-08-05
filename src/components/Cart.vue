@@ -56,7 +56,11 @@
       </v-layout>
     </v-container>
     <v-layout>
-    <v-flex></v-flex>
+      <v-spacer></v-spacer>
+    <v-flex>
+      <v-btn>Remove all</v-btn>
+    </v-flex>
+      <v-spacer></v-spacer>
     <v-flex xs2>
     <h2>
     Total: Rs. {{totalCartPrice}}

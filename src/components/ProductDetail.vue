@@ -32,10 +32,17 @@
         <hr>
         <br>
         <v-layout>
-          <v-flex>
+          <v-flex xs8>
             <h2>
               Rs. {{product.cost}}
             </h2>
+          </v-flex>
+          <v-flex>
+            <v-btn fab small flat>
+              <v-icon>
+                mdi-heart
+              </v-icon>
+            </v-btn>
           </v-flex>
           <v-flex xs4>
             <v-btn color="primary" @click="addToCart(product.id)">
