@@ -5,26 +5,32 @@ const state = {
   allSubCategories: [],
   randomSubCategories: [],
   allBrands: [],
-  message: null
+  message: null,
+  indexDetail: null
 }
 
-const getters = {
-}
+const getters = {}
 
 const actions = {
-  addCategoryAdmin ({ state, commit }, categorySubcategory) {
+  getIndexPageDetail({ state, commit }) {
+    api().get('admin/counts')
+      .then(r => {
+        commit('setIndexPageDetail', r.data)
+      })
+  },
+  addCategoryAdmin({ state, commit }, categorySubcategory) {
     api().post('admin/addCategory', categorySubcategory)
       .then(() => commit('setSuccessMessage'))
       .catch(() => commit('setFailureMessage'))
   },
-  getAllSubCategories ({ state, commit }) {
+  getAllSubCategories({ state, commit }) {
     api().get('subcategory')
       .then(r => {
         commit('setAllSubCategories', r.data)
       })
       .catch(() => commit('setFailureMessage'))
   },
-  getAllBrands ({ state, commit }) {
+  getAllBrands({ state, commit }) {
     api().get('brands')
       .then(r => {
         commit('setAllBrands', r.data._embedded.brands.map(brand => {
@@ -33,30 +39,33 @@ const actions = {
       })
       .catch(() => commit('setFailureMessage'))
   },
-  addNewProduct ({ state, commit }, product) {
+  addNewProduct({ state, commit }, product) {
     api().post('admin/addProduct', product)
       .then(() => commit('setSuccessMessage'))
       .catch(() => commit('setFailureMessage'))
   },
-  addNewBrand ({ state, commit }, brandName) {
+  addNewBrand({ state, commit }, brandName) {
     api().post('brands', { name: brandName })
       .then(() => commit('setSuccessMessage'))
       .catch(() => commit('setFailureMessage'))
-  },
+  }
 }
 
 const mutations = {
-  setSuccessMessage (state) {
+  setSuccessMessage(state) {
     state.message = 'Operation completed successfully'
   },
-  setFailureMessage (state) {
+  setFailureMessage(state) {
     state.message = 'Operation failed due to one or more errors'
   },
-  setAllSubCategories (state, subCategories) {
+  setAllSubCategories(state, subCategories) {
     state.allSubCategories = subCategories
   },
-  setAllBrands (state, brands) {
+  setAllBrands(state, brands) {
     state.allBrands = brands
+  },
+  setIndexPageDetail(state, detail) {
+    state.indexDetail = detail
   }
 }
 

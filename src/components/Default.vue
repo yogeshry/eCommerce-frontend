@@ -75,7 +75,6 @@
           Close
         </v-btn>
       </v-snackbar>
-      {{userId}}{{ username }} {{authenticated}} {{jwt}}
       <slot/>
     </v-content>
     <div>

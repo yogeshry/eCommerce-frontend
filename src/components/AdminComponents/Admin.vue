@@ -46,7 +46,6 @@
       <v-spacer></v-spacer>
     </v-toolbar>
     <v-content>
-      {{username}} {{authenticated}} {{jwt}}
       <slot/>
     </v-content>
     <v-footer fixed app>
