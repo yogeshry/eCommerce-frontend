@@ -8,9 +8,9 @@
     >
       <v-layout row wrap>
         <v-flex
-          v-for="card in cards"
+          v-for="item in allCartProducts"
           v-bind="{xs12: true }"
-          :key="card.title"
+          :key="item.id"
         ><v-card>
           <v-layout>
           <v-flex xs2>
@@ -24,8 +24,8 @@
           </v-flex>
           <v-flex>
             <v-card-title>
-                {{card.title}}
-              <v-btn small fab depressed>
+                {{item.name}} {{item.model}}
+              <v-btn small fab depressed @click="removeItemFromCartAndRefresh(item.id)">
                 <v-icon>mdi-delete</v-icon>
               </v-btn>
             </v-card-title></v-flex>
@@ -35,18 +35,18 @@
               <v-flex xs2>
               <v-select
                 :items="[1,2,3,4,5,6,7,8,9,10]"
-                v-model="quantity"
-                :rules="rules"
+                v-model="items.find(cartItem => cartItem.productId === item.id).quantity"
                 label="quantity"
                 @change=""
-              type="number">
+              >
               </v-select>
               </v-flex>
               </v-layout>
               </v-flex>
             <v-flex xs1>
               <br><h3>
-              Rs. {{card.cost}}
+              Rs. {{item.cost}}
+              SubTotal: {{calculateSubTotal(items.find(cartItem => cartItem.productId === item.id).quantity, item.cost)}}
             </h3>
             </v-flex>
           </v-layout>
@@ -59,7 +59,7 @@
     <v-flex></v-flex>
     <v-flex xs2>
     <h2>
-    Total: Rs. total
+    Total: Rs. {{totalCartPrice}}
   </h2>
     </v-flex>
     </v-layout>
@@ -69,47 +69,74 @@
     <v-flex xs10>
     </v-flex>
     <v-flex>
-      <v-btn>
+      <v-btn @click="submit">
         Checkout
       </v-btn>
     </v-flex>
   </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="10000"
+      :color="info"
+      multi-line
+      right
+    >
+      {{message}}
+      <v-btn
+        color="primary"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
 <script>
+  import {mapActions, mapState, mapGetters} from 'vuex'
   export default {
     name: 'Detail',
     data () {
       return {
-        items: [
-          {id: 1, name: 'Iphone', model: '8 Plus', cost: 99000, description: 'This is Iphone 8 Plus', specifications: 'specs', order_quantity: 5, vat: 13, shipping: 50},
-          {id: 2, name: 'Iphone', model: '10 Plus', cost: 10000, description: 'This is Iphone 10 Plus', specifications: 'specs', order_quantity: 1, vat: 13, shipping: 90}
-        ]
+        snackbar: false,
+        message: null
       }
     },
     computed: {
-      subTotal () {
-        let stotal = 0
-        for (let itm in this.items) {
-          stotal = stotal + this.items[itm].order_quantity * this.items[itm].cost
-        }
-        return stotal
+      ...mapGetters({
+        totalCartItems: 'cart/cartTotalItems',
+        totalCartPrice: 'cart/cartTotalPrice'
+      }),
+      ...mapState({
+        items: state => state.cart.items,
+        allCartProducts: state => state.cart.cartProducts,
+        cartRemoveStatus: state => state.cart.cartRemoveStatus,
+        checkoutStatus: state => state.cart.checkoutStatus
+      })
+    },
+    mounted () {
+      this.getCartItems()
+    },
+    methods: {
+      ...mapActions({
+        getCartItems: 'cart/getCartItems',
+        removeItemFromCart: 'cart/removeItemFromCart',
+        removeAllItemsFromCart: 'cart/removeAllItemsFromCart',
+        checkout: 'cart/checkout'
+      }),
+      calculateSubTotal (quantity, cost) {
+        return quantity * cost
       },
-      VAT () {
-        return this.items[0].vat * this.subTotal / 100
+      removeItemFromCartAndRefresh(productId) {
+        this.removeItemFromCart(productId)
+        this.message = this.cartRemoveStatus
+        this.$router.go(0)
       },
-      shipping () {
-        let shipPrice = 0
-        for (let itm in this.items) {
-          if (this.items[itm].order_quantity === 0) {
-            shipPrice = 0
-          } else shipPrice = shipPrice + this.items[itm].shipping
-        }
-        return shipPrice
-      },
-      getTotal () {
-        return this.subTotal + this.VAT + this.items[0].shipping
+      submit () {
+        this.checkout()
+        this.$router.push({name: 'Home'})
+        this.$router.go(0)
       }
     }
   }
@@ -117,96 +144,4 @@
 
 <style scoped>
 
-  .title {
-    display: flex;
-    justify-content: space-between;
-    text-align: center;
-    margin: 0;
-    text-transform: uppercase;
-    font-size: 110%;
-    font-weight: normal;
-  }
-
-  .continue {
-    margin: 0 2px;
-    font-size: 60%;
-    color: rgba(255, 100, 145, 0.6);
-    text-decoration: underline;
-    cursor: pointer;
-  }
-
-  .items {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-  }
-
-  .cart {
-    background: #fff;
-    font-family: "Helvetica Neue", Arial, sans-serif;
-    font-size: 16px;
-    color: #333a45;
-    border-radius: 3px;
-    padding: 30px;
-  }
-  .cart-line {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin: 20px 0 0 0;
-    font-size: inherit;
-    font-weight: normal;
-    color: rgba(51, 58, 69, 0.8);
-  }
-  .cart-price {
-    color: #333a45;
-  }
-  .cart-total {
-    font-size: 130%;
-  }
-
-  .item {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 0;
-    border-bottom: 2px solid rgba(51, 58, 69, 0.1);
-  }
-  .item-preview {
-    display: flex;
-    align-items: center;
-  }
-  .item-thumbnail {
-    margin-right: 20px;
-    border-radius: 3px;
-    height: 75px;
-    width: 45px;
-  }
-  .item-title {
-    margin: 0 0 10px 0;
-    font-size: inherit;
-  }
-  .item-description {
-    margin: 0;
-    color: rgba(51, 58, 69, 0.6);
-  }
-  .item-quantity {
-    max-width: 100px;
-    padding: 8px 12px;
-    font-size: inherit;
-    color: rgba(51, 58, 69, 0.8);
-    border: 2px solid rgba(51, 58, 69, 0.1);
-    border-radius: 3px;
-    text-align: center;
-  }
-  .item-price {
-    margin-left: 20px;
-  }
-  .line-before-btn {
-    padding: 15px 0;
-    border-bottom: 2px solid rgba(51, 58, 69, 0.1);
-  }
-  .checkout-line {
-    margin: 20px 0 0 0;
-  }
 </style>
