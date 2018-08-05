@@ -56,7 +56,7 @@
 </template>
 
 <script>
-  import {mapActions, mapState} from 'vuex'
+  import { mapActions, mapGetters, mapState } from 'vuex'
   // import api from './api/api'
   export default {
     name: 'Admin',
@@ -69,27 +69,27 @@
           'name': 'Add',
           'icon': 'mdi-library-plus',
           'subItems': [
-            {'name': 'Categories', 'url': 'AddCategories'},
-            {'name': 'Products', 'url': 'AddProducts'}
+            { 'name': 'Categories', 'url': 'AddCategories' },
+            { 'name': 'Products', 'url': 'AddProducts' }
           ]
         },
         {
           'name': 'View',
           'icon': 'mdi-eye',
           'subItems': [
-              {'id': '10', 'name': 'Categories', 'url': 'ViewCategories'},
-              {'id': '11', 'name': 'Products', 'url': 'ViewProducts'},
-              {'id': '15', 'name': 'Users', 'url': 'ViewUsers'},
-              {'id': '17', 'name': 'Orders', 'url': 'ViewOrders'},
-              {'id': '19', 'name': 'Cart', 'url': 'ViewCart'}
+              { 'id': '10', 'name': 'Categories', 'url': 'ViewCategories' },
+              { 'id': '11', 'name': 'Products', 'url': 'ViewProducts' },
+              { 'id': '15', 'name': 'Users', 'url': 'ViewUsers' },
+              { 'id': '17', 'name': 'Orders', 'url': 'ViewOrders' },
+              { 'id': '19', 'name': 'Cart', 'url': 'ViewCart' }
           ]
         },
         {
           'name': 'Admin',
           'icon': 'mdi-account-key',
           'subItems': [
-              {'id': '254', 'name': 'Add Admin', 'url': 'AddAdmin'},
-              {'id': '785', 'name': 'View Admin', 'url': 'ViewAdmin'}
+              { 'id': '254', 'name': 'Add Admin', 'url': 'AddAdmin' },
+              { 'id': '785', 'name': 'View Admin', 'url': 'ViewAdmin' }
           ]
         }
         ]
@@ -97,9 +97,13 @@
     },
     mounted () {
       this.getAuthenticationState()
-      this.getAllCategories()
-      this.getAllSubCategories()
-      this.getAllBrands()
+      if (!this.isAuthenticated) {
+        this.$router.replace({ name: 'Home' })
+      } else {
+        this.getAllCategories()
+        this.getAllSubCategories()
+        this.getAllBrands()
+      }
     },
 
     /*
@@ -107,12 +111,17 @@
       api().get('category').then(response => {this.items = response.data})
     },
     */
-    computed: mapState({
-      categories: state => state.categories.all,
-      username: state => state.auth.username,
-      jwt: state => state.auth.token,
-      authenticated: state => state.auth.authenticated
-    }),
+    computed: {
+      ...mapGetters({
+        isAuthenticated: 'auth/isAuthenticated'
+      }),
+      ...mapState({
+        categories: state => state.categories.all,
+        username: state => state.auth.username,
+        jwt: state => state.auth.token,
+        authenticated: state => state.auth.authenticated
+      })
+    },
     methods: {
       ...mapActions({
         logoutUser: 'auth/logout',
@@ -123,7 +132,7 @@
       }),
       logout () {
         this.logoutUser()
-        this.$router.push({name: 'Admin'})
+        this.$router.push({ name: 'Admin' })
         this.$router.go(0)
       }
     }

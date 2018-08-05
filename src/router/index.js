@@ -61,67 +61,67 @@ export default new Router({
       path: '/admin',
       name: 'AdminIndex',
       component: AdminIndex,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/login',
       name: 'AdminLogin',
       component: AdminLogin,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/AddCategories',
       name: 'AddCategories',
       component: AddCategories,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/AddProducts',
       name: 'AddProducts',
       component: AddProducts,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewCategories',
       name: 'ViewCategories',
       component: ViewCategories,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewProducts',
       name: 'ViewProducts',
       component: ViewProducts,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewUsers',
       name: 'ViewUsers',
       component: ViewUsers,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewOrders',
       name: 'ViewOrders',
       component: ViewOrders,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewCart',
       name: 'ViewCart',
       component: ViewCart,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/AddAdmin',
       name: 'AddAdmin',
       component: AddAdmin,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     },
     {
       path: '/admin/ViewAdmin',
       name: 'ViewAdmin',
       component: ViewAdmin,
-      meta: {layout: 'admin'}
+      meta: { layout: 'admin' }
     }
   ],
   mode: 'history'
