@@ -19,6 +19,12 @@ const actions = {
       .catch(() => {
         commit('setMessage', 'User Cannot be found')
       })
+  },
+  updateUser ({commit, state}, payload) {
+    commit('updateUser', payload)
+    api().post('users', state.user)
+      .then(() => commit('setMessage', 'User Edited Successfully.'))
+      .catch(() => commit('setMessage', 'Error updating user.'))
   }
 }
 
@@ -28,6 +34,9 @@ const mutations = {
   },
   setMessage (state, message) {
     state.message = message
+  },
+  updateUser (state, payload) {
+    state.user[payload.key] = payload.value
   }
 }
 

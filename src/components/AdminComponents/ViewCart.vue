@@ -1,11 +1,11 @@
 <template>
-    
+
 </template>
 
 <script>
-    export default {
-        name: "ViewCart"
-    }
+  export default {
+    name: 'ViewCart'
+  }
 </script>
 
 <style scoped>

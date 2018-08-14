@@ -58,7 +58,7 @@
     <v-layout>
       <v-spacer></v-spacer>
     <v-flex>
-      <v-btn>Remove all</v-btn>
+      <v-btn @click="removeAllItemsFromCartAndRefresh">Remove all</v-btn>
     </v-flex>
       <v-spacer></v-spacer>
     <v-flex xs2>
@@ -132,9 +132,15 @@
       calculateSubTotal (quantity, cost) {
         return quantity * cost
       },
-      removeItemFromCartAndRefresh(productId) {
+      removeItemFromCartAndRefresh (productId) {
         this.removeItemFromCart(productId)
         this.message = this.cartRemoveStatus
+        this.$router.go(0)
+      },
+      removeAllItemsFromCartAndRefresh () {
+        this.removeAllItemsFromCart()
+        this.message = this.cartRemoveStatus
+        this.$router.replace({name: 'Home'})
         this.$router.go(0)
       },
       submit () {

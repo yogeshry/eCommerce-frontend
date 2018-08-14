@@ -72,14 +72,30 @@
                 </v-layout>
               </v-card-text>
               <v-card-actions>
-                <v-btn :disabled="!infos">Confirm</v-btn>
-                <v-btn @click="clear(); dialog = false">Cancel</v-btn>
+                <v-btn @click="submit" :disabled="!infos">Confirm</v-btn>
+                <v-btn @click="clear(); dialog=false">Cancel</v-btn>
               </v-card-actions>
             </v-form>
           </v-container>
         </v-card>
       </v-dialog>
     </v-layout>
+    <v-snackbar
+      v-model="snackbar"
+      :timeout="10000"
+      :color="info"
+      multi-line
+      right
+    >
+      {{message}}
+      <v-btn
+        color="primary"
+        flat
+        @click="snackbar = false"
+      >
+        Close
+      </v-btn>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -94,6 +110,7 @@
         info: null,
         editInfo: '',
         infos: true,
+        snackbar: false,
         rules: {
           required: v => !!v || 'This field is required',
           phoneNumber1: [
@@ -109,7 +126,8 @@
     },
     computed: {
       ...mapState({
-        user: state => state.user.user
+        user: state => state.user.user,
+        message: state => state.user.message
       })
     },
     mounted () {
@@ -117,7 +135,8 @@
     },
     methods: {
       ...mapActions({
-        getUser: 'user/getUser'
+        getUser: 'user/getUser',
+        updateUser: 'user/updateUser'
       }),
       edit (info) {
         this.dialog = true
@@ -125,6 +144,14 @@
       },
       clear () {
         this.$refs.form.reset()
+      },
+      submit () {
+        if (this.$refs.form.validate()) {
+          this.updateUser({key: this.info, value: this.editInfo})
+        }
+        this.dialog = false
+        this.clear()
+        this.snackbar = true
       }
     }
   }

@@ -86,10 +86,6 @@
                     type="number"
                     required
                   ></v-text-field>
-                  <v-layout>
-                    <input type="file" name="pic" accept="image/*">
-                  </v-layout>
-                  <br>
                   <v-btn
                     :disabled="!addProducts"
                     @click="submit"

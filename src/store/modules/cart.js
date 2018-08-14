@@ -30,7 +30,7 @@ const getters = {
 
 // actions
 const actions = {
-  getCartProducts({ state, commit }) {
+  getCartProducts ({ state, commit }) {
     commit('emptyCartProducts')
     state.items.forEach((item) => {
       api().get(`api/products/${item.productId}`)
@@ -54,13 +54,13 @@ const actions = {
   //   )
   // },
 
-  checkout({ commit, state, rootState }) {
+  checkout ({ commit, state, rootState }) {
     api().get(`order/confirmOrder/${rootState.auth.username}`)
       .then(() => commit('setCheckoutStatus', 'Successfully checked out'))
       .catch(() => commit('setCheckoutStatus', 'Cannot Checkout'))
   },
 
-  getCartItems({ state, commit, rootState, dispatch }) {
+  getCartItems ({ state, commit, rootState, dispatch }) {
     api().get(`order/cartItem/${rootState.auth.username}`)
       .then(r => {
         commit('setCartItems', r.data)
@@ -71,14 +71,14 @@ const actions = {
       })
     // commit('setCartItems', {items})
   },
-  getAllCartProducts({ state, commit }, username) {
+  getAllCartProducts ({ state, commit }, username) {
     api().get(`order/getAllCartProducts/${username}`)
       .then(r => {
         commit('setCartProducts', r.data)
       })
       .catch(() => commit('setStatus', 'Cannot get cart products'))
   },
-  addProductToCart({ state, commit, rootState }, productId) {
+  addProductToCart ({ state, commit, rootState }, productId) {
     commit('setCheckoutStatus', null)
     const cartItem = state.items.find(
       item => item.productId === productId)
@@ -94,13 +94,13 @@ const actions = {
       .then(() => commit('setCartAddStatus', 'Success'))
       .catch(() => commit('setCartAddStatus', 'Failed'))
   },
-  removeItemFromCart({ state, commit, rootState }, productId) {
+  removeItemFromCart ({ state, commit, rootState }, productId) {
     api()
       .get(`order/removeCartItem/${rootState.auth.username}/${productId}`)
       .then(() => commit('setCartRemoveStatus', 'Success'))
       .catch(() => commit('setCartRemoveStatus', 'Failed'))
   },
-  removeAllItemsFromCart({ state, commit, rootState }) {
+  removeAllItemsFromCart ({ state, commit, rootState }) {
     api()
       .get(`order/removeAllCartItems/${rootState.auth.username}`)
       .then(() => commit('setCartRemoveStatus', 'Success'))
@@ -110,11 +110,11 @@ const actions = {
 
 // mutations
 const mutations = {
-  setCartProducts(state, product) {
+  setCartProducts (state, product) {
     state.cartProducts = product
   },
 
-  pushProductToCart(state, payload) {
+  pushProductToCart (state, payload) {
     state.items.push({
       productId: payload.productId,
       username: payload.username,
@@ -122,31 +122,31 @@ const mutations = {
     })
   },
 
-  emptyCardProducts(state) {
+  emptyCardProducts (state) {
     state.cartProducts = null
   },
 
-  setStatus(state, status) {
+  setStatus (state, status) {
     state.status = status
   },
 
-  incrementItemQuantity(state, cart) {
+  incrementItemQuantity (state, cart) {
     const cartItem = state.items.find(item => item.productId === cart.productId)
     cartItem.quantity++
   },
 
-  setCartItems(state, items) {
+  setCartItems (state, items) {
     state.items = items
   },
 
-  setCheckoutStatus(state, status) {
+  setCheckoutStatus (state, status) {
     state.checkoutStatus = status
   },
 
-  setCartAddStatus(state, cartAddStatus) {
+  setCartAddStatus (state, cartAddStatus) {
     state.cartAddStatus = cartAddStatus
   },
-  setCartRemoveStatus(state, cartRemoveStatus) {
+  setCartRemoveStatus (state, cartRemoveStatus) {
     state.cartRemoveStatus = cartRemoveStatus
   }
 }

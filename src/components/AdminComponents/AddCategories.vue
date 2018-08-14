@@ -52,9 +52,6 @@
                   </v-btn>
                   <v-btn @click="clear">clear</v-btn>
                 </v-form>
-                {{category}}
-                {{categoryIcon}}
-                {{subCategories}}
               </v-flex>
             </v-layout>
           </v-card-text>

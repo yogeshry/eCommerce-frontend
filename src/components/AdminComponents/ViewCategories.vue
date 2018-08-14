@@ -6,9 +6,9 @@
     >
       <v-layout row wrap>
         <v-flex
-          v-for="card in cards"
-          v-bind="{ [`xs${card.flex}`]: true }"
-          :key="card.title"
+          v-for="category in allCategories"
+          v-bind="{ [`xs3`]: true }"
+          :key="category.id"
         >
           <v-card>
             <v-card-title>
@@ -16,15 +16,15 @@
                 <v-btn
                   slot="activator"
                 >
-                  {{card.title}}
+                  {{category.name}}
                 </v-btn>
                 <v-list>
                   <v-list-tile
-                    v-for="(item, index) in items"
+                    v-for="(subCategory, index) in category.subCategories"
                     :key="index"
                     @click=""
                   >
-                    <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    <v-list-tile-title>{{ subCategory.name }}</v-list-tile-title>
                     <v-btn small fab depressed
                     :to="{name:'AdminIndex'}">
                       <v-icon>mdi-pencil</v-icon>
@@ -44,6 +44,7 @@
 </template>
 
 <script>
+  import {mapState, mapActions} from 'vuex'
   export default {
     name: 'ViewCategories',
     data () {
@@ -61,6 +62,21 @@
           { title: 'Click Me 2' }
         ]
       }
+    },
+    computed: {
+      ...mapState({
+        allCategories: state => state.categories.all,
+        allSubCategories: state => state.admin.allSubCategories
+      })
+    },
+    mounted () {
+      this.getAllCategories()
+    },
+    methods: {
+      ...mapActions({
+        getAllCategories: 'categories/getAllCategories',
+        getAllSubCategories: 'admin/allSubCategories'
+      })
     }
   }
 </script>
