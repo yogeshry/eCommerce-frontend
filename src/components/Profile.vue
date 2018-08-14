@@ -17,9 +17,7 @@
               <h3>
                 <v-layout>Name: {{user.firstName}} {{user.middleName}} {{user.lastName}}</v-layout>
                 <br>
-                <v-layout>Email: {{user.email}} &ensp;
-                  <v-icon
-                  @click.stop="edit('email')">mdi-pencil</v-icon>
+                <v-layout>Email: {{user.email}}
                 </v-layout>
                 <br>
                 <v-layout>Username: {{user.username}}</v-layout>
@@ -58,15 +56,15 @@
             <v-card-title>
               <span class="headline">Edit {{info}}</span>
             </v-card-title>
-            <v-form ref="form" v-model="info">
+            <v-form ref="form" v-model="infos">
               <v-card-text>
                 <v-layout>
                   Old {{info}}: {{user[info]}}
                 </v-layout>
                 <v-layout>
                   <v-text-field
-                    v-model="newBrandName"
-                    :rules="rules"
+                    v-model="editInfo"
+                    :rules="[rules.required].concat(rules[info])"
                     :label="'New ' + info"
                     required
                   >
@@ -74,7 +72,7 @@
                 </v-layout>
               </v-card-text>
               <v-card-actions>
-                <v-btn :disabled="!info" @click.native="addNewBrandConfirm">Confirm</v-btn>
+                <v-btn :disabled="!infos">Confirm</v-btn>
                 <v-btn @click="clear(); dialog = false">Cancel</v-btn>
               </v-card-actions>
             </v-form>
@@ -93,7 +91,20 @@
     data () {
       return {
         dialog: false,
-        info: null
+        info: null,
+        editInfo: '',
+        infos: true,
+        rules: {
+          required: v => !!v || 'This field is required',
+          phoneNumber1: [
+            v => /^[0-9]*$/.test(v) || 'Phone must contains digit only',
+            v => !v || v.length === 10 || 'Phone must be of 10 digits'
+          ],
+          phoneNumber2: [
+            v => /^[0-9]*$/.test(v) || 'Phone must contains digit only',
+            v => !v || v.length === 10 || 'Phone must be of 10 digits'
+          ]
+        }
       }
     },
     computed: {

@@ -18,7 +18,7 @@
                   <v-overflow-btn
                     v-model="subCategory"
                     :items="subCategories"
-                    :rules="Rules"
+                    :rules="rules"
                     label="SubCategory"
                     item-text="name"
                     item-value="id"
