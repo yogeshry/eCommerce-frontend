@@ -169,20 +169,6 @@
         addProducts: true,
         dialog: false,
         snackbar: false,
-        // dropdown_edit: [
-        //   { text: 'Apple' },
-        //   { text: 'Samsung' },
-        //   { text: 'LG' },
-        //   { text: 'Huawei' },
-        //   { text: 'Xiaomi' }
-        // ],
-        // items: [
-        //   {text: 'Apple'},
-        //   {text: 'Samsung'},
-        //   {text: 'LG'},
-        //   {text: 'Huawei'},
-        //   {text: 'Xiaomi'}
-        // ],
         subCategory: '',
         newBrandName: '',
         brand: '',

@@ -55,6 +55,12 @@
                   <h2>
                     {{product.name}}
                   </h2>
+                  <v-btn style="{z-index:1}"
+                  :to="{name: 'Home'}">
+                    <v-icon>
+                      mdi-heart
+                    </v-icon>
+                  </v-btn>
                 </div>
                 <v-spacer></v-spacer>
               </v-card-title>

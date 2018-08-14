@@ -31,6 +31,7 @@ Vue.component('default-layout', Default)
 Vue.component('admin-layout', Admin)
 
 /* eslint-disable no-new */
+// Vue instance
 new Vue({
   el: '#app',
   store,

@@ -57,7 +57,7 @@
 </template>
 
 <script>
-  import { mapActions, mapState } from 'vuex'
+  import {mapActions, mapState} from 'vuex'
 
   export default {
     name: 'ProductDetail',
@@ -67,13 +67,15 @@
       }
     },
     mounted () {
-      this.getProductById({ id: this.$route.params.id })
+      this.getProductById({id: this.$route.params.id})
       // this.$store.dispatch('products/getProductById', {id: this.$route.params.id})
     },
-    computed: mapState({
-      product: state => state.products.product,
-      username: state => state.auth.username
-    }),
+    computed: {
+      ...mapState({
+        product: state => state.products.product,
+        username: state => state.auth.username
+      })
+    },
     methods: {
       ...mapActions({
         getProductById: 'products/getProductById',

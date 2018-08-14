@@ -23,7 +23,7 @@ const actions = {
       .then(() => commit('setSuccessMessage'))
       .catch(() => commit('setFailureMessage'))
   },
-  getAllSubCategories({ state, commit }) {
+  getAllSubCategories ({ state, commit }) {
     api().get('subcategory')
       .then(r => {
         commit('setAllSubCategories', r.data)
